@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html class="dark" lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#c9a96e",
+                        "background-light": "#f8f7f6",
+                        "background-dark": "#12110f",
+                    },
+                    fontFamily: {
+                        "display": ["Cairo", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+    <style>
+        :root {
+            --primary: #c9a96e;
+            --background-dark: #12110f;
+            --surface: #1c1c1c;
+        }
+        html {
+            scroll-behavior: smooth;
+        }
+        .glass {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+        }
+        .hero-gradient {
+            background: linear-gradient(to bottom, rgba(18, 17, 15, 0) 0%, rgba(18, 17, 15, 0.95) 100%);
+        }
+        .reveal {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display">
+<!-- Top Navigation -->
+<header class="fixed top-0 w-full z-50 border-b border-white/10 bg-background-dark/80 backdrop-blur-md px-6 lg:px-20 py-4 flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="text-primary material-symbols-outlined text-3xl">directions_car</span>
+<h1 class="font-bold text-2xl tracking-tight text-slate-100">اوتو لاين</h1>
+</div>
+<nav class="hidden md:flex items-center gap-10">
+<a class="text-sm font-medium hover:text-primary transition-colors tracking-widest" href="index.html">الرئيسية</a>
+<a class="text-sm font-medium hover:text-primary transition-colors tracking-widest" href="about.html">من نحن</a>
+<a class="text-sm font-medium text-primary tracking-widest" href="vehicles_gallery.html">سيارات للايجار</a>
+<a class="text-sm font-medium hover:text-primary transition-colors tracking-widest" href="blog.html">المدونة</a>
+<a class="text-sm font-medium hover:text-primary transition-colors tracking-widest" href="#contact">تواصل معنا</a>
+</nav>
+<a href="booking_flow.html" class="bg-primary text-background-dark px-8 py-2.5 rounded-lg font-bold text-sm tracking-wider hover:bg-white transition-all shadow-lg text-center">
+            احجز الآن
+        </a>
+</header>
+
+<main class="pt-20">
+<!-- Hero Header -->
+<div class="relative h-80 w-full bg-slate-900 overflow-hidden">
+<div class="absolute inset-0 hero-gradient z-10"></div>
+<img class="absolute inset-0 w-full h-full object-cover opacity-30 grayscale" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAitu1DGpWgKagZtDAlowsja8DObqFfvaRV63-KXaIvl748yiUMrH4cja7tdrvodEOpBSX2hxxdlP3uj5utsqvUo4E2xlSRk8BIGrY8mJ4Gv6aBWyJhhO52j5w2cv5vYUkiIU_9wPuOwv_mbxQvFjw7h8IZdyQnHjYb-caci7F5fi5mjVYlu6BSIr5vU103ePZd-u-awFiQzNWycM9pX324xGMSIUeaZTCyJgZOspjaxyNazxEQSJQ90oqr5AEAg5qhdEdQlewn-0AO" alt="Fleet Background"/>
+<div class="container mx-auto relative z-20 h-full flex flex-col justify-center px-6 text-right reveal active">
+<h4 class="text-primary font-bold uppercase tracking-[0.4em] text-xs mb-4">اكتشف مجموعتنا</h4>
+<h2 class="text-6xl md:text-8xl font-black text-white leading-tight">أسطولنا الفخم</h2>
+</div>
+</div>
+
+<div class="container mx-auto px-6 py-12">
+<div class="flex flex-col gap-12">
+<!-- Horizontal Filters -->
+<div class="bg-surface border border-white/5 rounded-[2.5rem] p-10 text-right reveal active shadow-2xl mt-[-50px] relative z-30">
+<form id="filter-form" class="flex flex-col lg:flex-row items-end gap-10">
+<div class="flex flex-wrap flex-1 gap-10 w-full justify-end">
+<!-- Brand Filter -->
+<div class="flex-1 min-w-[220px]">
+<label class="block text-[10px] font-black text-primary mb-3 uppercase tracking-[0.2em]">الماركة</label>
+<select id="brand-filter" class="w-full bg-background-dark/50 border-white/10 rounded-2xl text-white focus:ring-primary focus:border-primary px-6 py-4 text-sm font-bold appearance-none transition-all">
+<option value="all">كل الماركات الفاخرة</option>
+</select>
+</div>
+
+<!-- Color Filter -->
+<div class="flex-1 min-w-[220px]">
+<label class="block text-[10px] font-black text-primary mb-3 uppercase tracking-[0.2em]">اللون</label>
+<select id="color-filter" class="w-full bg-background-dark/50 border-white/10 rounded-2xl text-white focus:ring-primary focus:border-primary px-6 py-4 text-sm font-bold appearance-none transition-all">
+<option value="all">كل الألوان المتاحة</option>
+</select>
+</div>
+
+<!-- Max Price Filter -->
+<div class="flex-1 min-w-[220px]">
+<label class="block text-[10px] font-black text-primary mb-3 uppercase tracking-[0.2em]">السعر (حد أقصى)</label>
+<div class="relative">
+<input id="price-filter" type="number" placeholder="مثال: 5000" class="w-full bg-background-dark/50 border-white/10 rounded-2xl text-white focus:ring-primary focus:border-primary px-6 py-4 text-sm font-bold pr-16"/>
+<span class="absolute left-6 top-1/2 -translate-y-1/2 text-slate-500 text-xs font-bold">ج.م</span>
+</div>
+</div>
+</div>
+
+<button type="submit" class="bg-primary text-background-dark font-black py-5 px-12 rounded-2xl hover:bg-white transition-all shadow-[0_0_30px_rgba(201,169,110,0.3)] flex items-center justify-center gap-3 h-[60px] min-w-[150px]">
+<span>بحث</span>
+<span class="material-symbols-outlined font-black">search</span>
+</button>
+</form>
+</div>
+
+<!-- Grid Section -->
+<div id="cars-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+    <!-- Dynamic Car Cards -->
+</div>
+</div>
+</div>
+</main>
+
+<!-- Footer -->
+<footer id="contact" class="bg-background-dark border-t border-white/5 pt-20 pb-10 px-6 lg:px-20 text-right">
+    <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-20">
+        <div class="col-span-1 lg:col-span-1">
+            <div class="flex items-center gap-2 mb-8 justify-end">
+                <span class="text-primary material-symbols-outlined text-3xl">directions_car</span>
+                <h1 class="text-3xl font-bold text-white">اوتو لاين</h1>
+            </div>
+            <p class="text-slate-500 text-sm leading-relaxed mb-8">
+                أوتو لاين، 2 مسجد الرحمن الرحيم، هاكستيب، النزهة، محافظة القاهرة 4473212
+            </p>
+            <div class="flex gap-4 justify-end">
+                <a class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-slate-400 hover:bg-primary hover:text-background-dark transition-all" href="#">
+                    <span class="material-symbols-outlined text-xl">public</span>
+                </a>
+                <a class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-slate-400 hover:bg-primary hover:text-background-dark transition-all" href="#">
+                    <span class="material-symbols-outlined text-xl">camera_alt</span>
+                </a>
+                <a class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-slate-400 hover:bg-primary hover:text-background-dark transition-all" href="#">
+                    <span class="material-symbols-outlined text-xl">chat</span>
+                </a>
+            </div>
+        </div>
+        <div>
+            <h5 class="text-white font-bold uppercase tracking-widest text-xs mb-8">روابط سريعة</h5>
+            <ul class="space-y-4 text-slate-500 text-sm">
+                <li><a class="hover:text-primary transition-colors" href="index.html">الرئيسية</a></li>
+                <li><a class="hover:text-primary transition-colors" href="about.html">من نحن</a></li>
+                <li><a class="hover:text-primary transition-colors" href="vehicles_gallery.html">سيارات للايجار</a></li>
+                <li><a class="hover:text-primary transition-colors" href="blog.html">المدونة</a></li>
+            </ul>
+        </div>
+        <div>
+            <h5 class="text-white font-bold uppercase tracking-widest text-xs mb-8">تواصل معنا</h5>
+            <ul class="space-y-4 text-slate-500 text-sm">
+                <li class="flex items-center gap-3 justify-end">
+                    <span>+20 100 341 2321</span>
+                    <span class="material-symbols-outlined text-primary text-lg">call</span>
+                </li>
+                <li class="flex items-center gap-3 justify-end">
+                    <span>+20 115 414 4465</span>
+                    <span class="material-symbols-outlined text-primary text-lg">call</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="max-w-7xl mx-auto border-t border-white/5 pt-10 flex flex-col md:flex-row justify-between items-center gap-6">
+        <p class="text-slate-600 text-[10px] uppercase tracking-[0.3em]">© 2026 اوتو لاين لتاجير السيارات. جميع الحقوق محفوظة.</p>
+        <div class="flex gap-8">
+            <a class="text-slate-600 text-[10px] uppercase tracking-[0.2em] hover:text-white" href="#">Designed by Yaaalla</a>
+        </div>
+    </div>
+</footer>
+<script src="gallery.js"></script>
+</body>
+</html>

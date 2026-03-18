@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html class="dark" lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#c9a96e",
+                        "background-light": "#f8f7f6",
+                        "background-dark": "#12110f",
+                        "accent-dark": "#1A2420",
+                        "surface": "#1c1c1c",
+                    },
+                    fontFamily: {
+                        "display": ["Cairo", "sans-serif"],
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        :root {
+            --primary: #c9a96e;
+            --background-dark: #12110f;
+            --surface: #1c1c1c;
+        }
+        html {
+            scroll-behavior: smooth;
+        }
+        .glass {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+        }
+        .hero-gradient {
+            background: linear-gradient(to bottom, rgba(18, 17, 15, 0) 0%, rgba(18, 17, 15, 0.95) 100%);
+        }
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .delay-1 { transition-delay: 0.1s; }
+        .delay-2 { transition-delay: 0.2s; }
+        .delay-3 { transition-delay: 0.3s; }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display">
+<!-- Top Navigation -->
+<header class="fixed top-0 w-full z-50 border-b border-white/10 bg-background-dark/80 backdrop-blur-md px-6 lg:px-20 py-4 flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="text-primary material-symbols-outlined text-3xl">directions_car</span>
+<h1 class="font-bold text-2xl tracking-tight text-slate-100">اوتو لاين</h1>
+</div>
+<nav class="hidden md:flex items-center gap-10">
+<a class="text-sm font-medium hover:text-primary transition-colors tracking-widest" href="index.html">الرئيسية</a>
+<a class="text-sm font-medium hover:text-primary transition-colors tracking-widest" href="about.html">من نحن</a>
+<a class="text-sm font-medium hover:text-primary transition-colors tracking-widest" href="vehicles_gallery.html">سيارات للايجار</a>
+<a class="text-sm font-medium hover:text-primary transition-colors tracking-widest" href="blog.html">المدونة</a>
+<a class="text-sm font-medium hover:text-primary transition-colors tracking-widest" href="contact.html">تواصل معنا</a>
+</nav>
+<a href="booking_flow.html" class="bg-primary text-background-dark px-8 py-2.5 rounded-lg font-bold text-sm tracking-wider hover:bg-white transition-all shadow-lg text-center">
+            احجز الآن
+        </a>
+</header>
+<!-- Hero Section -->
+<section class="relative h-screen w-full flex flex-col items-center justify-center overflow-hidden">
+<div class="absolute inset-0 z-0">
+<div class="absolute inset-0 hero-gradient z-10"></div>
+<img alt="Hero Car" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC7HcLpgfaE59uEG7K2C1TXDq16kT-TJrRGCaGVnoWbxxdpwjH8O2bE7ucJA71NQMcnulweRX_IsDkA7DB9qba0BVlxI6LOX54VzaeD8oR4meyR6CCoyWEtwiAoowGS5DjC_sSUbbeVb3LenV17qLY9EEyzq9-EUMO9gaU3gU4ejtjm9f5lRZSQkfqX2L8rQNeQRpL3wvzPCgFVb8vfEV618ANjj3ONf02d7c2RiaqpvT52rZbC-z_TH14KEOs4DJ82EU_f0W-26O6j"/>
+</div>
+<div class="relative z-20 text-center px-4 max-w-5xl mt-20 reveal active">
+<div class="glass inline-block px-8 py-3 rounded-full mb-8 delay-1">
+<span class="text-primary text-xl font-bold tracking-[0.2em] uppercase">اوتو لاين لتاجير السيارات</span>
+</div>
+<h1 class="text-6xl md:text-8xl lg:text-[100px] font-black text-white mb-10 leading-[1.1] tracking-tighter delay-2">
+                أجر سيارتك <br/> <span class="text-primary italic">بأمان وفخامة</span>
+            </h1>
+<p class="text-slate-300 text-xl md:text-2xl max-w-2xl mx-auto mb-12 font-light leading-relaxed delay-3">
+    نقدم لك تجربة قيادة استثنائية مع أحدث موديلات السيارات العالمية بأفضل الأسعار.
+</p>
+<div class="flex flex-col sm:flex-row gap-6 justify-center delay-3">
+<a href="vehicles_gallery.html" class="bg-primary text-background-dark px-12 py-5 rounded-2xl font-bold text-lg hover:bg-white hover:scale-105 transition-all shadow-[0_0_40px_rgba(201,169,110,0.4)]">
+                    تصفح الأسطول
+                </a>
+<a href="about.html" class="glass text-white px-12 py-5 rounded-2xl font-bold text-lg hover:bg-white/10 transition-all flex items-center gap-3 justify-center">
+<span>اعرف المزيد</span>
+<span class="material-symbols-outlined">arrow_back</span>
+</a>
+</div>
+</div>
+<!-- Booking Bar -->
+<div class="absolute bottom-10 left-1/2 -translate-x-1/2 w-full max-w-6xl px-4 z-30">
+<div class="bg-surface border border-white/5 rounded-xl p-3 shadow-2xl flex flex-wrap lg:flex-nowrap items-center gap-2">
+<div class="flex-1 min-w-[160px] p-3 border-r border-white/10 last:border-0 group">
+<label class="text-[10px] uppercase tracking-widest text-primary font-bold mb-1 block">الموقع</label>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-slate-400 text-xl">location_on</span>
+<input class="bg-transparent border-0 p-0 text-sm focus:ring-0 text-white placeholder-slate-500 w-full" placeholder="اختر الموقع" type="text"/>
+</div>
+</div>
+<div class="flex-1 min-w-[160px] p-3 border-r border-white/10 last:border-0">
+<label class="text-[10px] uppercase tracking-widest text-primary font-bold mb-1 block">تاريخ الاستلام</label>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-slate-400 text-xl">calendar_today</span>
+<input class="bg-transparent border-0 p-0 text-sm focus:ring-0 text-white placeholder-slate-500 w-full" placeholder="اختر التاريخ" type="text"/>
+</div>
+</div>
+<div class="flex-1 min-w-[160px] p-3 border-r border-white/10 last:border-0">
+<label class="text-[10px] uppercase tracking-widest text-primary font-bold mb-1 block">تاريخ الإرجاع</label>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-slate-400 text-xl">event_available</span>
+<input class="bg-transparent border-0 p-0 text-sm focus:ring-0 text-white placeholder-slate-500 w-full" placeholder="اختر التاريخ" type="text"/>
+</div>
+</div>
+<div class="flex-1 min-w-[160px] p-3 border-r border-white/10 last:border-0">
+<label class="text-[10px] uppercase tracking-widest text-primary font-bold mb-1 block">الفئة</label>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-slate-400 text-xl">directions_car</span>
+<select class="bg-transparent border-0 p-0 text-sm focus:ring-0 text-white w-full">
+<option>سيارة فاخرة</option>
+<option>سيدان</option>
+<option>SUV</option>
+</select>
+</div>
+</div>
+<a href="vehicles_gallery.html" class="bg-primary hover:bg-white text-background-dark font-bold rounded-lg px-10 py-4 h-full transition-all text-center flex items-center justify-center">
+                    بحث
+                </a>
+</div>
+</div>
+</section>
+
+<!-- Categories Section -->
+<section id="categories" class="py-32 px-6 lg:px-20 bg-background-dark">
+<div class="max-w-7xl mx-auto reveal">
+<div class="text-center mb-24">
+<h4 class="text-primary font-bold uppercase tracking-[0.4em] text-xs mb-6">اختياراتنا الفاخرة</h4>
+<h2 class="text-5xl md:text-7xl text-white font-black leading-tight">فئات السيارات</h2>
+<div class="w-24 h-1.5 bg-primary mx-auto mt-8 rounded-full"></div>
+</div>
+
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+<!-- Economic -->
+<div class="group surface p-10 rounded-[2.5rem] border border-white/5 hover:border-primary/50 transition-all duration-500 hover:-translate-y-2 text-right">
+<div class="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center mb-8 group-hover:bg-primary transition-colors mr-0 ml-auto">
+<span class="text-primary material-symbols-outlined text-4xl group-hover:text-background-dark transition-colors">directions_car</span>
+</div>
+<h3 class="text-2xl font-bold text-white mb-4">السيارات الاقتصادية</h3>
+<p class="text-slate-400 leading-relaxed font-light">مثالية للتنقل اليومي وتوفير الوقود، مع الحفاظ على الأناقة والراحة.</p>
+</div>
+
+<!-- Family -->
+<div class="group surface p-10 rounded-[2.5rem] border border-white/5 hover:border-primary/50 transition-all duration-500 hover:-translate-y-2 text-right">
+<div class="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center mb-8 group-hover:bg-primary transition-colors mr-0 ml-auto">
+<span class="text-primary material-symbols-outlined text-4xl group-hover:text-background-dark transition-colors">family_restroom</span>
+</div>
+<h3 class="text-2xl font-bold text-white mb-4">السيارات العائلية</h3>
+<p class="text-slate-400 leading-relaxed font-light">توفر مساحة واسعة وراحة متناهية لجميع أفراد العائلة في رحلاتكم.</p>
+</div>
+
+<!-- SUV -->
+<div class="group surface p-10 rounded-[2.5rem] border border-white/5 hover:border-primary/50 transition-all duration-500 hover:-translate-y-2 text-right">
+<div class="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center mb-8 group-hover:bg-primary transition-colors mr-0 ml-auto">
+<span class="text-primary material-symbols-outlined text-4xl group-hover:text-background-dark transition-colors">landscape</span>
+</div>
+<h3 class="text-2xl font-bold text-white mb-4">سيارات الدفع الرباعي</h3>
+<p class="text-slate-400 leading-relaxed font-light">مناسبة للمغامرات والطرق الوعرة، تجمع القوة بالفخامة.</p>
+</div>
+
+<!-- Luxury -->
+<div class="group surface p-10 rounded-[2.5rem] border border-white/5 hover:border-primary/50 transition-all duration-500 hover:-translate-y-2 text-right">
+<div class="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center mb-8 group-hover:bg-primary transition-colors mr-0 ml-auto">
+<span class="text-primary material-symbols-outlined text-4xl group-hover:text-background-dark transition-colors">diamond</span>
+</div>
+<h3 class="text-2xl font-bold text-white mb-4">السيارات الفاخرة</h3>
+<p class="text-slate-400 leading-relaxed font-light">لمن يبحثون عن تجربة قيادة فريدة وأنيقة تعكس شخصيتهم الراقية.</p>
+</div>
+
+<!-- Sports -->
+<div class="group surface p-10 rounded-[2.5rem] border border-white/5 hover:border-primary/50 transition-all duration-500 hover:-translate-y-2 text-right">
+<div class="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center mb-8 group-hover:bg-primary transition-colors mr-0 ml-auto">
+<span class="text-primary material-symbols-outlined text-4xl group-hover:text-background-dark transition-colors">speed</span>
+</div>
+<h3 class="text-2xl font-bold text-white mb-4">السيارات الرياضية</h3>
+<p class="text-slate-400 leading-relaxed font-light">لعشاق السرعة والأداء العالي، قوة لا تضاهى على الطريق.</p>
+</div>
+
+<!-- Events -->
+<div class="group surface p-10 rounded-[2.5rem] border border-white/5 hover:border-primary/50 transition-all duration-500 hover:-translate-y-2 text-right">
+<div class="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center mb-8 group-hover:bg-primary transition-colors mr-0 ml-auto">
+<span class="text-primary material-symbols-outlined text-4xl group-hover:text-background-dark transition-colors">celebration</span>
+</div>
+<h3 class="text-2xl font-bold text-white mb-4">تأجير للمناسبات</h3>
+<p class="text-slate-400 leading-relaxed font-light">اجعل مناسباتك الخاصة ذكرى لا تنسى مع سياراتنا المخصصة للأفراح.</p>
+</div>
+</div>
+</div>
+</section>
+</section>
+
+<!-- About Us Section -->
+<section id="about" class="px-6 lg:px-20 py-32 bg-background-light dark:bg-background-dark/50">
+<div class="max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-20 reveal">
+<div class="flex-1 w-full relative">
+<div class="relative rounded-[3rem] overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.5)] h-[650px]">
+<img alt="Bentley" class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-1000" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBNMVt6XOaDedA5EZxbl5zsxmOWZWYoY2ChVNCxwM6frsFLVBX3KzlR5poN0w2nbJzhsvROb7mN0ZjzKfKy6xFODbzLlusJou7mCDFVvo9BnfIMk8MZMhBcKGJRnES4w0GZB0cAk-PuggLnQ_9MSdp2v_o2c9ISUfPlSULmq3rniYd3ssZ1OSKi3ZSe0Ool6tIeFHk54j9UjBhsQAUv9UhCFGl0PpCPEdBtNmTKvW-TqTsLG7iKiIuEgBWvHrVPMXUxxlMCCuE_4x2L"/>
+<div class="absolute inset-0 bg-gradient-to-t from-background-dark/80 to-transparent"></div>
+</div>
+<div class="absolute -bottom-10 -left-10 glass p-8 rounded-3xl hidden xl:block delay-3">
+<div class="flex items-center gap-6">
+<div class="text-center">
+<p class="text-primary text-5xl font-black mb-1">+10</p>
+<p class="text-slate-400 text-[10px] uppercase font-bold tracking-widest">سنوات خبرة</p>
+</div>
+<div class="w-px h-12 bg-white/10"></div>
+<div class="text-center">
+<p class="text-primary text-5xl font-black mb-1">+500</p>
+<p class="text-slate-400 text-[10px] uppercase font-bold tracking-widest">سيارة فاخرة</p>
+</div>
+</div>
+</div>
+</div>
+<div class="flex-1 text-right">
+<div class="flex items-center gap-4 mb-8 justify-end">
+<span class="w-12 h-px bg-primary"></span>
+<span class="text-primary font-bold uppercase tracking-[0.3em] text-sm">من نحن</span>
+</div>
+<h2 class="text-5xl md:text-7xl text-white font-black mb-10 leading-tight">ماذا تعرف عن <span class="text-primary">اوتو لاين</span></h2>
+<p class="text-slate-400 text-xl mb-8 leading-relaxed font-light">
+    مرحبًا بكم في عالم الرفاهية. نحن لسنا مجرد شركة تأجير سيارات، نحن شركاؤك في رحلة التميز، نقدم لك أسطولاً يجمع بين القوة المتناهية والأناقة الخالدة.
+</p>
+<p class="text-slate-500 text-lg mb-12 leading-relaxed font-light italic">
+    نحن ملتزمون بتوفير تجربة استئجار مريحة وسهلة من خلال نظام حجز إلكتروني بسيط وسريع، وفريق دعم متاح على مدار الساعة لضمان رضاكم التام.
+</p>
+<a href="about.html" class="inline-flex items-center gap-4 text-primary font-bold text-lg hover:text-white transition-all group">
+<span class="material-symbols-outlined group-hover:-translate-x-2 transition-transform">arrow_forward</span>
+    اكتشف المزيد عن رؤيتنا
+</a>
+</div>
+</div>
+</section>
+
+<!-- Features Section -->
+<section class="py-32 px-6 lg:px-20 bg-background-dark/80 relative">
+<div class="max-w-7xl mx-auto reveal">
+<div class="text-center mb-24">
+<h4 class="text-primary font-bold uppercase tracking-[0.4em] text-xs mb-6">لماذا تختارنا</h4>
+<h2 class="text-5xl md:text-7xl text-white font-black leading-tight">مميزات اوتو لاين</h2>
+<div class="w-24 h-1.5 bg-primary mx-auto mt-8 rounded-full"></div>
+</div>
+
+<div class="grid md:grid-cols-3 gap-16">
+<div class="text-center group">
+<div class="w-24 h-24 bg-primary/10 rounded-[2rem] flex items-center justify-center mx-auto mb-10 group-hover:bg-primary group-hover:rotate-6 transition-all duration-500">
+<span class="material-symbols-outlined text-5xl text-primary group-hover:text-background-dark">airline_seat_recline_extra</span>
+</div>
+<h4 class="text-white text-2xl font-bold mb-6">راحة استثنائية</h4>
+<p class="text-slate-400 leading-relaxed font-light">نوفر سيارات حديثة ومجهزة بأحدث التقنيات لتضمن تجربة قيادة مريحة وآمنة في كل ميل.</p>
+</div>
+
+<div class="text-center group">
+<div class="w-24 h-24 bg-primary/10 rounded-[2rem] flex items-center justify-center mx-auto mb-10 group-hover:bg-primary group-hover:-rotate-6 transition-all duration-500">
+<span class="material-symbols-outlined text-5xl text-primary group-hover:text-background-dark">timer</span>
+</div>
+<h4 class="text-white text-2xl font-bold mb-6">وقت أقل</h4>
+<p class="text-slate-400 leading-relaxed font-light">مع نظام الحجز الإلكتروني المتطور لدينا، يمكنك العثور على سيارتك المثالية خلال دقائق معدودة.</p>
+</div>
+
+<div class="text-center group">
+<div class="w-24 h-24 bg-primary/10 rounded-[2rem] flex items-center justify-center mx-auto mb-10 group-hover:bg-primary group-hover:rotate-6 transition-all duration-500">
+<span class="material-symbols-outlined text-5xl text-primary group-hover:text-background-dark">payments</span>
+</div>
+<h4 class="text-white text-2xl font-bold mb-6">أسعار تنافسية</h4>
+<p class="text-slate-400 leading-relaxed font-light">نقدم باقات سعرية متنوعة وحصرية تضمن لك الحصول على أقصى قيمة مقابل ما تدفعه.</p>
+</div>
+</div>
+</div>
+</section>
+
+<!-- Rent Now Section (CTA) -->
+<section class="py-32 px-6 lg:px-20 relative overflow-hidden bg-primary">
+<div class="absolute inset-0 opacity-10">
+<img src="https://lh3.googleusercontent.com/aida-public/AB6AXuC7HcLpgfaE59uEG7K2C1TXDq16kT-TJrRGCaGVnoWbxxdpwjH8O2bE7ucJA71NQMcnulweRX_IsDkA7DB9qba0BVlxI6LOX54VzaeD8oR4meyR6CCoyWEtwiAoowGS5DjC_sSUbbeVb3LenV17qLY9EEyzq9-EUMO9gaU3gU4ejtjm9f5lRZSQkfqX2L8rQNeQRpL3wvzPCgFVb8vfEV618ANjj3ONf02d7c2RiaqpvT52rZbC-z_TH14KEOs4DJ82EU_f0W-26O6j" class="w-full h-full object-cover grayscale"/>
+</div>
+<div class="relative z-10 max-w-5xl mx-auto text-center reveal">
+<h2 class="text-5xl md:text-7xl text-background-dark font-black mb-10">هل أنت مستعد لبدء رحلتك؟</h2>
+<p class="text-2xl text-background-dark/80 mb-12 font-medium max-w-3xl mx-auto">مع اوتو لاين، الرفاهية ليست خياراً بل هي أسلوب حياة. احجز سيارتك الآن واكتشف الفرق بنفسك.</p>
+<div class="flex flex-col sm:flex-row gap-6 justify-center">
+<a href="booking_flow.html" class="bg-background-dark text-primary font-bold px-16 py-6 rounded-2xl text-xl hover:bg-white hover:text-background-dark transition-all flex items-center justify-center gap-3 shadow-2xl">
+<span>ابدأ الحجز الآن</span>
+<span class="material-symbols-outlined font-black">arrow_forward</span>
+</a>
+</div>
+</div>
+</section>
+
+<!-- Fleet Showcase -->
+<section class="py-32 px-6 lg:px-20 bg-background-dark">
+<div class="max-w-7xl mx-auto reveal">
+<div class="flex flex-col md:flex-row justify-between items-end mb-24 gap-12">
+<div class="text-right">
+<h4 class="text-primary font-bold uppercase tracking-[0.4em] text-xs mb-4">أسطولنا الفخم</h4>
+<h2 class="text-5xl md:text-7xl text-white font-black leading-tight">سيارات للايجار</h2>
+</div>
+<a href="vehicles_gallery.html" class="group flex items-center gap-4 text-primary hover:text-white font-bold text-xl transition-all pb-2 border-b-2 border-primary/20 hover:border-white">
+<span>عرض جميع السيارات</span>
+<span class="material-symbols-outlined group-hover:-translate-x-3 transition-transform">arrow_forward</span>
+</a>
+</div>
+<div id="home-cars-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
+    <!-- Dynamic Car Cards -->
+</div>
+</div>
+</section>
+
+<!-- Blogs Section -->
+<section id="blog" class="py-24 px-6 lg:px-20 bg-background-dark border-t border-white/5">
+    <div class="max-w-7xl mx-auto">
+        <div class="text-center mb-16">
+            <h2 class="text-5xl text-white font-bold mb-4">احدث المقالات لدينا</h2>
+            <p class="text-slate-400 text-sm">ابق على اطلاع بأحدث أخبارنا</p>
+        </div>
+        <div id="home-blogs-grid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Dynamic Blogs -->
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer id="contact" class="bg-background-dark border-t border-white/5 pt-20 pb-10 px-6 lg:px-20 text-right">
+    <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-20">
+        <div class="col-span-1 lg:col-span-1">
+            <div class="flex items-center gap-2 mb-8 justify-end">
+                <span class="text-primary material-symbols-outlined text-3xl">directions_car</span>
+                <h1 class="text-3xl font-bold text-white">اوتو لاين</h1>
+            </div>
+            <p class="text-slate-500 text-sm leading-relaxed mb-8">
+                أوتو لاين، 2 مسجد الرحمن الرحيم، هاكستيب، النزهة، محافظة القاهرة 4473212
+            </p>
+            <div class="flex gap-4 justify-end">
+                <a class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-slate-400 hover:bg-primary hover:text-background-dark transition-all" href="#">
+                    <span class="material-symbols-outlined text-xl">public</span>
+                </a>
+                <a class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-slate-400 hover:bg-primary hover:text-background-dark transition-all" href="#">
+                    <span class="material-symbols-outlined text-xl">camera_alt</span>
+                </a>
+                <a class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-slate-400 hover:bg-primary hover:text-background-dark transition-all" href="#">
+                    <span class="material-symbols-outlined text-xl">chat</span>
+                </a>
+            </div>
+        </div>
+        <div>
+            <h5 class="text-white font-bold uppercase tracking-widest text-xs mb-8">روابط سريعة</h5>
+            <ul class="space-y-4 text-slate-500 text-sm">
+                <li><a class="hover:text-primary transition-colors" href="index.html">الرئيسية</a></li>
+                <li><a class="hover:text-primary transition-colors" href="about.html">من نحن</a></li>
+                <li><a class="hover:text-primary transition-colors" href="vehicles_gallery.html">سيارات للايجار</a></li>
+                <li><a class="hover:text-primary transition-colors" href="blog.html">المدونة</a></li>
+            </ul>
+        </div>
+        <div>
+            <h5 class="text-white font-bold uppercase tracking-widest text-xs mb-8">تواصل معنا</h5>
+            <ul class="space-y-4 text-slate-500 text-sm">
+                <li class="flex items-center gap-3 justify-end">
+                    <span>+20 100 341 2321</span>
+                    <span class="material-symbols-outlined text-primary text-lg">call</span>
+                </li>
+                <li class="flex items-center gap-3 justify-end">
+                    <span>+20 115 414 4465</span>
+                    <span class="material-symbols-outlined text-primary text-lg">call</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="max-w-7xl mx-auto border-t border-white/5 pt-10 flex flex-col md:flex-row justify-between items-center gap-6">
+        <p class="text-slate-600 text-[10px] uppercase tracking-[0.3em]">© 2026 اوتو لاين لتاجير السيارات. جميع الحقوق محفوظة.</p>
+        <div class="flex gap-8">
+            <a class="text-slate-600 text-[10px] uppercase tracking-[0.2em] hover:text-white" href="#">Designed by Yaaalla</a>
+        </div>
+    </div>
+</footer>
+
+<script>
+    // Reveal animations on scroll
+    function reveal() {
+        var reveals = document.querySelectorAll(".reveal");
+        for (var i = 0; i < reveals.length; i++) {
+            var windowHeight = window.innerHeight;
+            var elementTop = reveals[i].getBoundingClientRect().top;
+            var elementVisible = 150;
+            if (elementTop < windowHeight - elementVisible) {
+                reveals[i].classList.add("active");
+            }
+        }
+    }
+    window.addEventListener("scroll", reveal);
+    // Trigger on load
+    document.addEventListener("DOMContentLoaded", reveal);
+</script>
+<script src="home.js"></script>
+</body>
+</html>

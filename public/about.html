@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html class="dark" lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#c9a96e",
+                        "background-light": "#f8f7f6",
+                        "background-dark": "#12110f",
+                        "accent-dark": "#1A2420",
+                        "surface": "#1c1c1c",
+                    },
+                    fontFamily: {
+                        "display": ["Cairo", "sans-serif"],
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+    <style>
+        :root {
+            --primary: #c9a96e;
+            --background-dark: #12110f;
+            --surface: #1c1c1c;
+        }
+        html {
+            scroll-behavior: smooth;
+        }
+        .glass {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+        }
+        .hero-gradient {
+            background: linear-gradient(to bottom, rgba(18, 17, 15, 0) 0%, rgba(18, 17, 15, 0.95) 100%);
+        }
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .delay-1 { transition-delay: 0.1s; }
+        .delay-2 { transition-delay: 0.2s; }
+        .delay-3 { transition-delay: 0.3s; }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display">
+<!-- Top Navigation -->
+<header class="fixed top-0 w-full z-50 border-b border-white/10 bg-background-dark/80 backdrop-blur-md px-6 lg:px-20 py-4 flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="text-primary material-symbols-outlined text-3xl">directions_car</span>
+<h1 class="font-bold text-2xl tracking-tight text-slate-100">اوتو لاين</h1>
+</div>
+<nav class="hidden md:flex items-center gap-10">
+<a class="text-sm font-medium hover:text-primary transition-colors tracking-widest" href="index.html">الرئيسية</a>
+<a class="text-sm font-medium hover:text-primary transition-colors tracking-widest text-primary" href="about.html">من نحن</a>
+<a class="text-sm font-medium hover:text-primary transition-colors tracking-widest" href="vehicles_gallery.html">سيارات للايجار</a>
+<a class="text-sm font-medium hover:text-primary transition-colors tracking-widest" href="blog.html">المدونة</a>
+<a class="text-sm font-medium hover:text-primary transition-colors tracking-widest" href="contact.html">تواصل معنا</a>
+</nav>
+<a href="booking_flow.html" class="bg-primary text-background-dark px-8 py-2.5 rounded-lg font-bold text-sm tracking-wider hover:bg-white transition-all shadow-lg text-center">
+            احجز الآن
+        </a>
+</header>
+
+<!-- Hero Section -->
+<section class="relative h-[60vh] w-full flex flex-col items-center justify-center overflow-hidden">
+<div class="absolute inset-0 z-0">
+<div class="absolute inset-0 hero-gradient z-10"></div>
+<img alt="Hero Car" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC7HcLpgfaE59uEG7K2C1TXDq16kT-TJrRGCaGVnoWbxxdpwjH8O2bE7ucJA71NQMcnulweRX_IsDkA7DB9qba0BVlxI6LOX54VzaeD8oR4meyR6CCoyWEtwiAoowGS5DjC_sSUbbeVb3LenV17qLY9EEyzq9-EUMO9gaU3gU4ejtjm9f5lRZSQkfqX2L8rQNeQRpL3wvzPCgFVb8vfEV618ANjj3ONf02d7c2RiaqpvT52rZbC-z_TH14KEOs4DJ82EU_f0W-26O6j"/>
+</div>
+<div class="relative z-20 text-center px-4 max-w-5xl mt-20 reveal active">
+<div class="glass inline-block px-8 py-3 rounded-full mb-8 delay-1">
+<span class="text-primary text-xl font-bold tracking-[0.2em] uppercase">About Auto Line</span>
+</div>
+<h2 class="text-6xl md:text-8xl font-black text-white mb-8 leading-tight tracking-tight delay-2">مرحبًا بكم في اوتو لاين</h2>
+<p class="text-slate-300 text-xl md:text-2xl max-w-3xl mx-auto leading-relaxed font-light delay-3">
+    نحن لسنا مجرد شركة تأجير سيارات، بل شركاء في رحلة التميز، نقدم لك تجربة استثنائية تجمع بين الفخامة والاحترافية.
+</p>
+</div>
+</section>
+
+<!-- Services Section -->
+<section class="py-24 px-6 lg:px-20 bg-background-dark">
+<div class="max-w-7xl mx-auto">
+<div class="text-center mb-16">
+<span class="text-primary font-bold uppercase tracking-widest text-xs mb-4 block">خدماتنا</span>
+<h2 class="text-4xl text-white font-bold mb-4">مجموعة متنوعة من السيارات</h2>
+<p class="text-slate-400">توفر اوتو لاين مجموعة واسعة من السيارات تشمل:</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 text-right">
+<div class="p-10 border border-white/5 bg-white/5 rounded-2xl">
+<span class="text-primary material-symbols-outlined text-4xl mb-6">directions_car</span>
+<h3 class="text-xl text-white font-bold mb-4">السيارات الاقتصادية</h3>
+<p class="text-slate-400 text-sm leading-relaxed">مثالية للتنقل اليومي وتوفير الوقود.</p>
+</div>
+<div class="p-10 border border-white/5 bg-white/5 rounded-2xl">
+<span class="text-primary material-symbols-outlined text-4xl mb-6">family_restroom</span>
+<h3 class="text-xl text-white font-bold mb-4">السيارات العائلية</h3>
+<p class="text-slate-400 text-sm leading-relaxed">توفر مساحة واسعة وراحة للعائلة.</p>
+</div>
+<div class="p-10 border border-white/5 bg-white/5 rounded-2xl">
+<span class="text-primary material-symbols-outlined text-4xl mb-6">landscape</span>
+<h3 class="text-xl text-white font-bold mb-4">سيارات الدفع الرباعي</h3>
+<p class="text-slate-400 text-sm leading-relaxed">مناسبة للمغامرات والطرق الوعرة.</p>
+</div>
+<div class="p-10 border border-white/5 bg-white/5 rounded-2xl">
+<span class="text-primary material-symbols-outlined text-4xl mb-6">diamond</span>
+<h3 class="text-xl text-white font-bold mb-4">السيارات الفاخرة</h3>
+<p class="text-slate-400 text-sm leading-relaxed">لمن يبحثون عن تجربة قيادة فاخرة وأنيقة.</p>
+</div>
+<div class="p-10 border border-white/5 bg-white/5 rounded-2xl">
+<span class="text-primary material-symbols-outlined text-4xl mb-6">speed</span>
+<h3 class="text-xl text-white font-bold mb-4">السيارات الرياضية</h3>
+<p class="text-slate-400 text-sm leading-relaxed">لعشاق السرعة والأداء العالي.</p>
+</div>
+</div>
+</div>
+</section>
+
+<!-- Vision & Mission -->
+<section class="py-24 px-6 lg:px-20">
+<div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-16 text-right">
+<div class="group p-12 bg-white/5 rounded-3xl border border-white/10 hover:border-primary/50 transition-all">
+<div class="w-16 h-16 bg-primary/20 rounded-2xl flex items-center justify-center mb-8 mr-0 ml-auto">
+<span class="text-primary material-symbols-outlined text-3xl">visibility</span>
+</div>
+<h2 class="text-4xl text-white font-bold mb-6">رؤيتنا</h2>
+<p class="text-slate-300 text-lg leading-relaxed">
+    أن نكون الخيار الأول في تقديم حلول المواصلات المتميزة والمتنوعة في الشرق الأوسط وأفريقيا، مع التركيز على تقديم أفضل التجارب للعملاء من خلال الحفاظ على أعلى معايير الجودة والتميز.
+</p>
+</div>
+<div class="group p-12 bg-white/5 rounded-3xl border border-white/10 hover:border-primary/50 transition-all">
+<div class="w-16 h-16 bg-primary/20 rounded-2xl flex items-center justify-center mb-8 mr-0 ml-auto">
+<span class="text-primary material-symbols-outlined text-3xl">rocket_launch</span>
+</div>
+<h2 class="text-4xl text-white font-bold mb-6">رسالتنا</h2>
+<p class="text-slate-300 text-lg leading-relaxed">
+    رسالتنا تكمن في اتباع أعلى معايير الأعمال الأخلاقية من خلال حوكمة فعالة وشفافة مع الالتزام دائمًا بالوفاء بوعودنا للمساهمين والعملاء. نحن نهدف إلى تقديم خدمات تأجير سيارات تتميز بالجودة والاحترافية، مع الحفاظ على رضا العملاء كشعار أساسي لنا.
+</p>
+</div>
+</div>
+</section>
+
+<!-- Values Section -->
+<section class="py-24 px-6 lg:px-20 bg-accent-dark">
+<div class="max-w-7xl mx-auto text-center">
+<div class="flex items-center justify-center gap-3 mb-4">
+<span class="text-primary material-symbols-outlined">workspace_premium</span>
+<span class="text-primary font-bold uppercase tracking-widest text-xs">قيمنا</span>
+</div>
+<h2 class="text-5xl text-white font-bold mb-16 underline decoration-primary/30 underline-offset-8">ما نؤمن به</h2>
+<div class="grid md:grid-cols-2 gap-12 text-right max-w-5xl mx-auto">
+<div class="flex items-start gap-6">
+<div class="bg-primary/20 p-3 rounded-full mt-1">
+<span class="text-primary material-symbols-outlined text-2xl">check_circle</span>
+</div>
+<div>
+<h4 class="text-2xl text-white font-bold mb-4">العميل أولًا ودائمًا</h4>
+<p class="text-slate-400 leading-relaxed">نضع احتياجات عملائنا في مقدمة أولوياتنا، ونحرص على فهم متطلباتهم وتقديم حلول تتناسب معهم بشكل مثالي.</p>
+</div>
+</div>
+<div class="flex items-start gap-6">
+<div class="bg-primary/20 p-3 rounded-full mt-1">
+<span class="text-primary material-symbols-outlined text-2xl">check_circle</span>
+</div>
+<div>
+<h4 class="text-2xl text-white font-bold mb-4">الجودة والاحترافية</h4>
+<p class="text-slate-400 leading-relaxed">نلتزم بتقديم أعلى مستويات الجودة في كل ما نقدمه.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- Why Choose Us -->
+<section class="py-24 px-6 lg:px-20 bg-background-dark">
+<div class="max-w-7xl mx-auto">
+<div class="text-center mb-16">
+<h2 class="text-5xl text-white font-bold mb-6">لماذا تختار اوتو لاين؟</h2>
+<div class="h-1 w-24 bg-primary mx-auto rounded-full"></div>
+</div>
+<div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+<div class="p-8 bg-surface rounded-2xl border border-white/5 hover:border-primary/20 transition-all text-right">
+<div class="w-14 h-14 bg-white/5 rounded-xl flex items-center justify-center mb-6 mr-0 ml-auto text-primary">
+<span class="material-symbols-outlined text-3xl">category</span>
+</div>
+<h4 class="text-white font-bold mb-4 text-xl">تنوع السيارات</h4>
+<p class="text-slate-400 text-sm leading-relaxed">نحرص على تقديم مجموعة متنوعة من السيارات لتناسب جميع الاحتياجات.</p>
+</div>
+<div class="p-8 bg-surface rounded-2xl border border-white/5 hover:border-primary/20 transition-all text-right">
+<div class="w-14 h-14 bg-white/5 rounded-xl flex items-center justify-center mb-6 mr-0 ml-auto text-primary">
+<span class="material-symbols-outlined text-3xl">event_available</span>
+</div>
+<h4 class="text-white font-bold mb-4 text-xl">المرونة في الخيارات</h4>
+<p class="text-slate-400 text-sm leading-relaxed">سواء كنت بحاجة لتأجير سيارة ليوم واحد أو لفترة طويلة، فنحن هنا لتلبية احتياجاتك.</p>
+</div>
+<div class="p-8 bg-surface rounded-2xl border border-white/5 hover:border-primary/20 transition-all text-right">
+<div class="w-14 h-14 bg-white/5 rounded-xl flex items-center justify-center mb-6 mr-0 ml-auto text-primary">
+<span class="material-symbols-outlined text-3xl">verified</span>
+</div>
+<h4 class="text-white font-bold mb-4 text-xl">الجودة والموثوقية</h4>
+<p class="text-slate-400 text-sm leading-relaxed">جميع سياراتنا تتميز بالجودة العالية وتخضع لصيانة دورية لضمان الأمان والراحة.</p>
+</div>
+<div class="p-8 bg-surface rounded-2xl border border-white/5 hover:border-primary/20 transition-all text-right">
+<div class="w-14 h-14 bg-white/5 rounded-xl flex items-center justify-center mb-6 mr-0 ml-auto text-primary">
+<span class="material-symbols-outlined text-3xl">support_agent</span>
+</div>
+<h4 class="text-white font-bold mb-4 text-xl">دعم العملاء المستمر</h4>
+<p class="text-slate-400 text-sm leading-relaxed">فريق الدعم لدينا متاح على مدار الساعة لتقديم المساعدة والإجابة على استفساراتك.</p>
+</div>
+</div>
+</div>
+</section>
+
+<!-- Footer -->
+<footer id="contact" class="bg-background-dark border-t border-white/5 pt-20 pb-10 px-6 lg:px-20 text-right">
+    <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-20">
+        <div class="col-span-1 lg:col-span-1">
+            <div class="flex items-center gap-2 mb-8 justify-end">
+                <span class="text-primary material-symbols-outlined text-3xl">directions_car</span>
+                <h1 class="text-3xl font-bold text-white">اوتو لاين</h1>
+            </div>
+            <p class="text-slate-500 text-sm leading-relaxed mb-8">
+                أوتو لاين، 2 مسجد الرحمن الرحيم، هاكستيب، النزهة، محافظة القاهرة 4473212
+            </p>
+            <div class="flex gap-4 justify-end">
+                <a class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-slate-400 hover:bg-primary hover:text-background-dark transition-all" href="#">
+                    <span class="material-symbols-outlined text-xl">public</span>
+                </a>
+                <a class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-slate-400 hover:bg-primary hover:text-background-dark transition-all" href="#">
+                    <span class="material-symbols-outlined text-xl">camera_alt</span>
+                </a>
+                <a class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-slate-400 hover:bg-primary hover:text-background-dark transition-all" href="#">
+                    <span class="material-symbols-outlined text-xl">chat</span>
+                </a>
+            </div>
+        </div>
+        <div>
+            <h5 class="text-white font-bold uppercase tracking-widest text-xs mb-8">روابط سريعة</h5>
+            <ul class="space-y-4 text-slate-500 text-sm">
+                <li><a class="hover:text-primary transition-colors" href="index.html">الرئيسية</a></li>
+                <li><a class="hover:text-primary transition-colors" href="about.html">من نحن</a></li>
+                <li><a class="hover:text-primary transition-colors" href="vehicles_gallery.html">سيارات للايجار</a></li>
+                <li><a class="hover:text-primary transition-colors" href="blog.html">المدونة</a></li>
+            </ul>
+        </div>
+        <div>
+            <h5 class="text-white font-bold uppercase tracking-widest text-xs mb-8">تواصل معنا</h5>
+            <ul class="space-y-4 text-slate-500 text-sm">
+                <li class="flex items-center gap-3 justify-end">
+                    <span>+20 100 341 2321</span>
+                    <span class="material-symbols-outlined text-primary text-lg">call</span>
+                </li>
+                <li class="flex items-center gap-3 justify-end">
+                    <span>+20 115 414 4465</span>
+                    <span class="material-symbols-outlined text-primary text-lg">call</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="max-w-7xl mx-auto border-t border-white/5 pt-10 flex flex-col md:flex-row justify-between items-center gap-6">
+        <p class="text-slate-600 text-[10px] uppercase tracking-[0.3em]">© 2026 اوتو لاين لتاجير السيارات. جميع الحقوق محفوظة.</p>
+        <div class="flex gap-8">
+            <a class="text-slate-600 text-[10px] uppercase tracking-[0.2em] hover:text-white" href="#">Designed by Yaaalla</a>
+        </div>
+    </div>
+</footer>
+<script>
+    // Reveal animations on scroll
+    function reveal() {
+        var reveals = document.querySelectorAll(".reveal");
+        for (var i = 0; i < reveals.length; i++) {
+            var windowHeight = window.innerHeight;
+            var elementTop = reveals[i].getBoundingClientRect().top;
+            var elementVisible = 150;
+            if (elementTop < windowHeight - elementVisible) {
+                reveals[i].classList.add("active");
+            }
+        }
+    }
+    window.addEventListener("scroll", reveal);
+    // Trigger on load
+    document.addEventListener("DOMContentLoaded", reveal);
+</script>
+</body>
+</html>

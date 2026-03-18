@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html class="dark" lang="ar" dir="rtl">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>احجز سيارتك | أوتو لاين</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#c9a96e",
+                        "background-dark": "#12110f",
+                        "surface": "#1c1c1c",
+                    },
+                    fontFamily: {
+                        "display": ["Cairo", "sans-serif"],
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        :root {
+            --primary: #c9a96e;
+            --background-dark: #12110f;
+            --surface: #1c1c1c;
+        }
+        body { font-family: 'Cairo', sans-serif; }
+        .contact-input {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        .contact-input:focus {
+            background: rgba(255, 255, 255, 0.06);
+            border-color: var(--primary);
+            box-shadow: 0 0 20px rgba(201, 169, 110, 0.1);
+            outline: none;
+        }
+        .stepper-active {
+            box-shadow: 0 0 20px rgba(201, 169, 110, 0.3);
+        }
+    </style>
+</head>
+<body class="bg-background-dark text-slate-100 font-display">
+<div class="relative flex h-auto min-h-screen w-full flex-col overflow-x-hidden">
+    <!-- Top Navigation Bar -->
+    <header class="fixed top-0 w-full z-50 border-b border-white/10 bg-background-dark/80 backdrop-blur-md px-6 lg:px-20 py-4 flex items-center justify-between">
+        <div class="flex items-center gap-2">
+            <span class="text-primary material-symbols-outlined text-3xl">directions_car</span>
+            <h1 class="font-bold text-2xl tracking-tight text-slate-100">اوتو لاين</h1>
+        </div>
+        <a href="index.html" class="flex items-center justify-center rounded-xl h-12 w-12 bg-white/5 text-slate-100 hover:bg-primary/20 transition-all border border-white/10 group">
+            <span class="material-symbols-outlined group-hover:rotate-90 transition-transform">close</span>
+        </a>
+    </header>
+
+    <main class="flex-1 max-w-7xl mx-auto w-full px-6 pt-32 pb-20">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
+            
+            <!-- Left Column: Summary Card (Sidebar) -->
+            <div class="lg:col-span-4 order-2 lg:order-1">
+                <div class="sticky top-32">
+                    <div id="summary-section" class="bg-[#1c1c1c]/50 backdrop-blur-xl rounded-[2.5rem] border border-white/5 overflow-hidden shadow-2xl p-10 text-right">
+                        <p class="text-slate-500 font-bold text-center my-auto">جاري تحميل إعدادات الحجز...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column: Simplified Form -->
+            <div class="lg:col-span-8 order-1 lg:order-2">
+                <div class="max-w-2xl mx-auto">
+                    <h2 class="text-5xl font-black text-white text-center mb-16">احجز رحلتك</h2>
+                    
+                    <form id="booking-form" class="space-y-10" enctype="multipart/form-data">
+                        <div class="space-y-3">
+                            <label class="block text-xs font-bold text-slate-400 mr-2">الاسم الكامل</label>
+                            <input id="customer_name" name="customer_name" required class="w-full bg-[#1c1c1c] border-0 rounded-2xl px-6 py-5 text-white focus:ring-1 focus:ring-primary/50 font-bold" placeholder="ادخل اسمك بالكامل" type="text"/>
+                        </div>
+
+                        <div class="space-y-3">
+                            <label class="block text-xs font-bold text-slate-400 mr-2">البريد الإلكتروني</label>
+                            <input id="customer_email" name="customer_email" required class="w-full bg-[#1c1c1c] border-0 rounded-2xl px-6 py-5 text-white focus:ring-1 focus:ring-primary/50 font-bold text-left" placeholder="example@mail.com" type="email"/>
+                        </div>
+
+                        <div class="space-y-3">
+                            <label class="block text-xs font-bold text-slate-400 mr-2">رقم الهاتف</label>
+                            <input id="customer_phone" name="customer_phone" required class="w-full bg-[#1c1c1c] border-0 rounded-2xl px-6 py-5 text-white focus:ring-1 focus:ring-primary/50 font-bold text-left" placeholder="+20 1..." type="tel"/>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-6">
+                            <div class="space-y-3">
+                                <label class="block text-xs font-bold text-slate-400 mr-2">تاريخ الاستلام</label>
+                                <input id="start_date" name="start_date" type="date" required class="w-full bg-[#1c1c1c] border-0 rounded-2xl px-6 py-5 text-white focus:ring-1 focus:ring-primary/50 font-bold [color-scheme:dark]" />
+                            </div>
+                            <div class="space-y-3">
+                                <label class="block text-xs font-bold text-slate-400 mr-2">تاريخ العودة</label>
+                                <input id="end_date" name="end_date" type="date" required class="w-full bg-[#1c1c1c] border-0 rounded-2xl px-6 py-5 text-white focus:ring-1 focus:ring-primary/50 font-bold [color-scheme:dark]" />
+                            </div>
+                        </div>
+
+
+                        <div class="pt-6">
+                            <button type="submit" id="submit-booking-btn" class="w-full bg-primary hover:bg-white text-background-dark font-black py-6 rounded-2xl transition-all shadow-[0_20px_50px_rgba(201,169,110,0.2)] text-xl">
+                                تأكيد طلب الحجز
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer id="contact" class="bg-background-dark border-t border-white/5 pt-20 pb-10 px-6 lg:px-20 text-right">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-20">
+            <div class="col-span-1 lg:col-span-1">
+                <div class="flex items-center gap-2 mb-8 justify-end">
+                    <span class="text-primary material-symbols-outlined text-3xl">directions_car</span>
+                    <h1 class="text-3xl font-bold text-white">اوتو لاين</h1>
+                </div>
+                <p class="text-slate-500 text-sm leading-relaxed mb-8">
+                    أوتو لاين، 2 مسجد الرحمن الرحيم، هاكستيب، النزهة، محافظة القاهرة 4473212
+                </p>
+                <div class="flex gap-4 justify-end">
+                    <a class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-slate-400 hover:bg-primary hover:text-background-dark transition-all" href="#">
+                        <span class="material-symbols-outlined text-xl">public</span>
+                    </a>
+                    <a class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-slate-400 hover:bg-primary hover:text-background-dark transition-all" href="#">
+                        <span class="material-symbols-outlined text-xl">camera_alt</span>
+                    </a>
+                    <a class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-slate-400 hover:bg-primary hover:text-background-dark transition-all" href="#">
+                        <span class="material-symbols-outlined text-xl">chat</span>
+                    </a>
+                </div>
+            </div>
+            <div>
+                <h5 class="text-white font-bold uppercase tracking-widest text-xs mb-8">روابط سريعة</h5>
+                <ul class="space-y-4 text-slate-500 text-sm">
+                    <li><a class="hover:text-primary transition-colors" href="index.html">الرئيسية</a></li>
+                    <li><a class="hover:text-primary transition-colors" href="about.html">من نحن</a></li>
+                    <li><a class="hover:text-primary transition-colors" href="vehicles_gallery.html">سيارات للايجار</a></li>
+                    <li><a class="hover:text-primary transition-colors" href="blog.html">المدونة</a></li>
+                </ul>
+            </div>
+            <div>
+                <h5 class="text-white font-bold uppercase tracking-widest text-xs mb-8">تواصل معنا</h5>
+                <ul class="space-y-4 text-slate-500 text-sm">
+                    <li class="flex items-center gap-3 justify-end">
+                        <span>+20 100 341 2321</span>
+                        <span class="material-symbols-outlined text-primary text-lg">call</span>
+                    </li>
+                    <li class="flex items-center gap-3 justify-end">
+                        <span>+20 115 414 4465</span>
+                        <span class="material-symbols-outlined text-primary text-lg">call</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="max-w-7xl mx-auto border-t border-white/5 pt-10 flex flex-col md:flex-row justify-between items-center gap-6">
+            <p class="text-slate-600 text-[10px] uppercase tracking-[0.3em]">© 2026 اوتو لاين لتاجير السيارات. جميع الحقوق محفوظة.</p>
+            <div class="flex gap-8">
+                <a class="text-slate-600 text-[10px] uppercase tracking-[0.2em] hover:text-white" href="#">Designed by Yaaalla</a>
+            </div>
+        </div>
+    </footer>
+</div>
+
+<!-- Modal for success/error -->
+<div id="status-modal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-md flex items-center justify-center p-6">
+    <div class="bg-surface w-full max-w-lg rounded-[3rem] p-12 text-center border border-white/5 relative shadow-2xl reveal active">
+        <div id="status-icon" class="mx-auto w-24 h-24 rounded-[2rem] flex items-center justify-center mb-8 bg-emerald-500/10 text-emerald-500">
+            <span class="material-symbols-outlined text-5xl">check_circle</span>
+        </div>
+        <h3 id="status-title" class="text-3xl font-black mb-4 text-white">تم تأكيد الحجز!</h3>
+        <p id="status-message" class="text-slate-400 text-lg font-light mb-10">سيارتك الفاخرة في انتظارك. سنتواصل معك قريباً.</p>
+        <button onclick="window.location.href='index.html'" class="w-full bg-primary text-background-dark font-black py-5 rounded-2xl hover:bg-white transition-all shadow-xl">
+            العودة إلى الرئيسية
+        </button>
+    </div>
+</div>
+
+<script src="booking.js"></script>
+</body>
+</html>

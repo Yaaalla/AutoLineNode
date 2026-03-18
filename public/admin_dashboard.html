@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html class="dark" lang="ar" dir="rtl">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>لوحة تحكم أوتو لاين</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+        rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#d1ab66",
+                        "background-dark": "#12100e",
+                        "surface": "#1a1714"
+                    },
+                    fontFamily: {
+                        "display": ["Cairo", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "2xl": "1rem", "3xl": "1.5rem" },
+                },
+            },
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: #12100e;
+            color: #ffffff;
+        }
+
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 1;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #333;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
+        .glass-panel {
+            background-color: #1a1714;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            border-radius: 1.5rem;
+        }
+
+        input,
+        select,
+        textarea {
+            background-color: #12100e !important;
+            border: 1px solid rgba(255, 255, 255, 0.05) !important;
+            color: #fff !important;
+            border-radius: 0.75rem !important;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            border-color: #d1ab66 !important;
+            outline: none !important;
+            box-shadow: none !important;
+        }
+    </style>
+</head>
+
+<body class="antialiased h-screen overflow-hidden flex">
+
+    <!-- Sidebar -->
+    <aside class="w-[280px] flex-shrink-0 bg-[#12100e] border-l border-white/5 flex flex-col h-full relative z-20">
+        <a href="index.html" class="pt-12 pb-8 px-8 flex flex-col items-center gap-2">
+            <h1 class="text-3xl font-extrabold tracking-tight text-white leading-none">اوتو لاين</h1>
+            <p class="text-[11px] text-[#00d084] font-bold flex items-center gap-1.5 opacity-80">
+                بوابة المسئول <span class="w-2 h-2 rounded-full bg-[#00d084] shadow-[0_0_8px_#00d084]"></span>
+            </p>
+        </a>
+
+        <nav class="flex-1 px-5 overflow-y-auto space-y-2 mt-4 text-[13px] font-bold">
+            <button id="tab-overview"
+                onclick="switchTab('overview', 'لوحة التحكم', 'مرحباً بك في نظام إدارة أوتو لاين')"
+                class="w-full flex items-center gap-4 px-5 py-3.5 rounded-2xl bg-primary text-background-dark transition-all">
+                <span class="material-symbols-outlined text-xl">dashboard</span>
+                <span>نظرة عامة</span>
+            </button>
+            <button id="tab-fleet" onclick="switchTab('fleet', 'إدارة الأسطول', 'تحكم في مجموعتك الحصرية من السيارات')"
+                class="w-full flex items-center gap-4 px-5 py-3.5 rounded-2xl text-slate-400 hover:text-white hover:bg-white/5 transition-all">
+                <span class="material-symbols-outlined text-xl">directions_car</span>
+                <span>إدارة الأسطول</span>
+            </button>
+            <button id="tab-blogs" onclick="switchTab('blogs', 'إدارة المدونة', 'نشر وتعديل المقالات')"
+                class="w-full flex items-center gap-4 px-5 py-3.5 rounded-2xl text-slate-400 hover:text-white hover:bg-white/5 transition-all">
+                <span class="material-symbols-outlined text-xl">article</span>
+                <span>إدارة المدونة</span>
+            </button>
+            <button id="tab-bookings"
+                onclick="switchTab('bookings', 'إدارة الحجوزات', 'تتبع وإدارة طلبات الحجز المتميزة')"
+                class="w-full flex items-center gap-4 px-5 py-3.5 rounded-2xl text-slate-400 hover:text-white hover:bg-white/5 transition-all">
+                <span class="material-symbols-outlined text-xl">calendar_month</span>
+                <span>الحجوزات الحالية</span>
+            </button>
+            <button id="tab-history" onclick="switchTab('history', 'سجل الحجوزات', 'الأرشيف الكامل للعمليات السابقة')"
+                class="w-full flex items-center gap-4 px-5 py-3.5 rounded-2xl text-slate-400 hover:text-white hover:bg-white/5 transition-all">
+                <span class="material-symbols-outlined text-xl">history</span>
+                <span>سجل الحجوزات</span>
+            </button>
+
+            <div class="pt-8 pb-2">
+                <span class="text-[10px] text-slate-600 px-5 font-bold uppercase tracking-widest">النظام</span>
+            </div>
+
+            <button id="tab-admins"
+                onclick="switchTab('admins', 'إدارة المسؤولين', 'إدارة طاقم العمل والتحكم في الصلاحيات')"
+                class="w-full flex items-center gap-4 px-5 py-3.5 rounded-2xl text-slate-400 hover:text-white hover:bg-white/5 transition-all">
+                <span class="material-symbols-outlined text-xl">admin_panel_settings</span>
+                <span>المديرين</span>
+            </button>
+        </nav>
+
+        <div class="p-6">
+            <button id="logout-btn"
+                class="w-full flex items-center gap-4 px-5 py-4 text-red-500/80 hover:text-red-400 hover:bg-red-500/10 rounded-2xl transition-all text-sm font-bold">
+                <span class="material-symbols-outlined">logout</span>
+                <span>تسجيل الخروج</span>
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 flex flex-col h-full overflow-hidden relative">
+        <!-- Header -->
+        <header class="pt-14 px-12 pb-8 flex items-end justify-between flex-shrink-0">
+            <div></div> <!-- Spacer for RTL -->
+            <div class="text-left">
+                <h2 id="page-title" class="text-[2.5rem] font-bold text-white mb-2 leading-none">لوحة التحكم</h2>
+                <p id="page-subtitle" class="text-sm text-slate-400 font-medium">مرحباً بك في نظام إدارة أوتو لاين</p>
+            </div>
+        </header>
+
+        <!-- Scrollable Area -->
+        <div class="flex-1 overflow-y-auto px-12 pb-12">
+
+            <!-- OVERVIEW VIEW -->
+            <div id="overview-view" class="space-y-8">
+                <!-- KPI Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="glass-panel p-6 flex flex-col justify-between min-h-[140px]">
+                        <div class="flex items-start justify-between">
+                            <div
+                                class="w-12 h-12 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-500 border border-blue-500/20">
+                                <span class="material-symbols-outlined">analytics</span>
+                            </div>
+                            <span class="text-xs text-slate-400 font-semibold">إجمالي الحجوزات</span>
+                        </div>
+                        <div class="flex items-end justify-between mt-4">
+                            <span class="text-[10px] text-blue-500 font-bold">منذ بداية النظام</span>
+                            <span class="text-4xl font-bold font-sans" id="stat-total-cars">1</span>
+                        </div>
+                    </div>
+
+                    <div class="glass-panel p-6 flex flex-col justify-between min-h-[140px]">
+                        <div class="flex items-start justify-between">
+                            <div
+                                class="w-12 h-12 rounded-xl bg-orange-500/10 flex items-center justify-center text-orange-500 border border-orange-500/20">
+                                <span class="material-symbols-outlined">schedule</span>
+                            </div>
+                            <span class="text-xs text-slate-400 font-semibold">قيد الانتظار</span>
+                        </div>
+                        <div class="flex items-end justify-between mt-4">
+                            <span class="text-[10px] text-orange-500 font-bold">عرض الحجوزات</span>
+                            <span class="text-4xl font-bold font-sans" id="stat-pending-bookings">0</span>
+                        </div>
+                    </div>
+
+                    <div class="glass-panel p-6 flex flex-col justify-between min-h-[140px]">
+                        <div class="flex items-start justify-between">
+                            <div
+                                class="w-12 h-12 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-500 border border-emerald-500/20">
+                                <span class="material-symbols-outlined">task_alt</span>
+                            </div>
+                            <span class="text-xs text-slate-400 font-semibold">مكتملة</span>
+                        </div>
+                        <div class="flex items-end justify-between mt-4">
+                            <span class="text-[10px] text-emerald-500 font-bold">عرض الحجوزات</span>
+                            <span class="text-4xl font-bold font-sans" id="stat-completed-bookings">0</span>
+                        </div>
+                    </div>
+
+                    <div class="glass-panel p-6 flex flex-col justify-between min-h-[140px]">
+                        <div class="flex items-start justify-between">
+                            <div
+                                class="w-12 h-12 rounded-xl bg-blue-400/10 flex items-center justify-center text-blue-400 border border-blue-400/20">
+                                <span class="material-symbols-outlined">verified</span>
+                            </div>
+                            <span class="text-xs text-slate-400 font-semibold">مؤكدة</span>
+                        </div>
+                        <div class="flex items-end justify-between mt-4">
+                            <span class="text-[10px] text-blue-400 font-bold">عرض الحجوزات</span>
+                            <span class="text-4xl font-bold font-sans" id="stat-ongoing-bookings">0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Bookings Table -->
+                <div class="glass-panel overflow-hidden">
+                    <div class="p-6 border-b border-white/5 flex items-center gap-3">
+                        <span class="material-symbols-outlined text-primary">receipt_long</span>
+                        <h3 class="text-lg font-bold">آخر الحجوزات</h3>
+                    </div>
+                    <div class="overflow-x-auto p-4">
+                        <table class="w-full text-center text-sm">
+                            <thead>
+                                <tr class="text-slate-500 text-[11px] font-bold">
+                                    <th class="py-4 px-4 font-medium">رقم المعرف</th>
+                                    <th class="py-4 px-4 font-medium">العميل</th>
+                                    <th class="py-4 px-4 font-medium">السيارة</th>
+                                    <th class="py-4 px-4 font-medium">المبلغ الإجمالي</th>
+                                    <th class="py-4 px-4 font-medium">الحالة</th>
+                                    <th class="py-4 px-4 font-medium">الإجراء</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-white/5">
+                                <tr class="hover:bg-white/5 transition-colors group">
+                                    <td class="py-4 px-4 font-sans font-bold text-slate-300">#25</td>
+                                    <td class="py-4 px-4">
+                                        <p class="font-bold text-white mb-0.5">Abdelrhman Hassan</p>
+                                        <p class="text-[10px] text-slate-500 font-sans">01202132434</p>
+                                    </td>
+                                    <td class="py-4 px-4 font-bold text-primary">BMW 330i</td>
+                                    <td class="py-4 px-4 font-bold font-sans relative">528.00 <span
+                                            class="text-[9px] mr-1 text-slate-400 absolute">جم</span></td>
+                                    <td class="py-4 px-4">
+                                        <span
+                                            class="bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 px-3 py-1 rounded-full text-[10px] font-bold">مكتمل</span>
+                                    </td>
+                                    <td class="py-4 px-4">
+                                        <button
+                                            class="text-slate-400 hover:text-white transition-colors text-[11px] font-bold flex items-center justify-center w-full gap-1">
+                                            عرض <span class="material-symbols-outlined text-sm">arrow_left_alt</span>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FLEET VIEW -->
+            <div id="fleet-view" class="hidden space-y-6">
+                <!-- Filters -->
+                <div class="glass-panel p-6">
+                    <div class="flex flex-row-reverse gap-4">
+                        <div class="flex-1 relative">
+                            <span
+                                class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-slate-500">search</span>
+                            <input type="text" class="w-full py-3 pr-12 pl-4 text-sm"
+                                placeholder="بحث فوري عن موديل أو ماركة...">
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-4 gap-4 mt-4">
+                        <div class="space-y-1.5 flex flex-col justify-end text-left">
+                            <label class="text-[10px] text-slate-400 font-bold block">السعر اليومي (كحد أقصى)</label>
+                            <input type="text" placeholder="مثال: 500"
+                                class="w-full py-3 px-4 text-sm text-left font-sans" dir="ltr">
+                        </div>
+                        <div class="space-y-1.5">
+                            <label class="text-[10px] text-slate-400 font-bold block text-right">ناقل الحركة</label>
+                            <select class="w-full py-3 px-4 text-sm">
+                                <option>كل الأنواع</option>
+                            </select>
+                        </div>
+                        <div class="space-y-1.5">
+                            <label class="text-[10px] text-slate-400 font-bold block text-right">نوع الوقود</label>
+                            <select class="w-full py-3 px-4 text-sm">
+                                <option>كل الأنواع</option>
+                            </select>
+                        </div>
+                        <div class="space-y-1.5 flex flex-col justify-end items-end">
+                            <label class="text-[10px] text-slate-400 font-bold block mb-1">الحالة</label>
+                            <div class="flex gap-2 w-full">
+                                <select class="w-full py-3 px-4 text-sm">
+                                    <option>جميع الحالات</option>
+                                </select>
+                                <button
+                                    class="bg-primary text-background-dark px-6 rounded-xl font-bold text-sm shrink-0">تطبيق</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Add Car Section Layout -->
+                <div class="glass-panel overflow-hidden">
+                    <div class="p-6 border-b border-white/5 flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div
+                                class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary border border-primary/20">
+                                <span class="material-symbols-outlined text-lg">directions_car</span>
+                            </div>
+                            <h3 class="text-lg font-bold">إضافة سيارة جديدة <br><span
+                                    class="text-[10px] text-slate-500 font-normal">توسيع الأسطول الملكي</span></h3>
+                        </div>
+                        <span class="text-[10px] text-slate-500 font-bold tracking-widest uppercase">Auto Line Fleet
+                            <span class="material-symbols-outlined text-xs align-middle">auto_awesome</span></span>
+                    </div>
+                    <div class="p-8">
+                        <form id="car-form" class="space-y-6">
+                            <div class="grid grid-cols-4 gap-6">
+                                <div class="space-y-2">
+                                    <label class="text-[11px] font-bold text-slate-400 block pb-1 text-center">الماركة
+                                        <span class="text-red-500">*</span></label>
+                                    <input type="text" name="brand" required
+                                        class="w-full text-center text-sm py-3 font-sans" placeholder="BMW">
+                                </div>
+                                <div class="space-y-2">
+                                    <label class="text-[11px] font-bold text-slate-400 block pb-1 text-center">الموديل
+                                        <span class="text-red-500">*</span></label>
+                                    <input type="text" name="model" required
+                                        class="w-full text-center text-sm py-3 font-sans" placeholder="M8 Competition">
+                                </div>
+                                <div class="space-y-2">
+                                    <label class="text-[11px] font-bold text-slate-400 block pb-1 text-center">الفئة
+                                        <span class="text-red-500">*</span></label>
+                                    <input type="text" name="category" required
+                                        class="w-full text-center text-sm py-3 font-sans" placeholder="Luxury">
+                                </div>
+                                <div class="space-y-2">
+                                    <label class="text-[11px] font-bold text-slate-400 block pb-1 text-center">سنة
+                                        الموديل</label>
+                                    <input type="number" class="w-full text-center text-sm py-3 font-sans"
+                                        placeholder="2024">
+                                </div>
+
+                                <div class="space-y-2">
+                                    <label class="text-[11px] font-bold text-slate-400 block pb-1 text-center">قوة
+                                        المحرك</label>
+                                    <input type="text" name="power" class="w-full text-center text-sm py-3 font-sans"
+                                        placeholder="V8 Engine">
+                                </div>
+                                <div class="space-y-2">
+                                    <label
+                                        class="text-[11px] font-bold text-slate-400 block pb-1 text-center">المقاعد</label>
+                                    <input type="number" name="seats" class="w-full text-center text-sm py-3 font-sans"
+                                        placeholder="4">
+                                </div>
+                                <div class="space-y-2">
+                                    <label class="text-[11px] font-bold text-slate-400 block pb-1 text-center">ناقل
+                                        الحركة</label>
+                                    <input type="text" name="transmission"
+                                        class="w-full text-center text-sm py-3 font-sans" placeholder="Automatic">
+                                </div>
+                                <div class="space-y-2">
+                                    <label class="text-[11px] font-bold text-slate-400 block pb-1 text-center">نوع
+                                        الوقود</label>
+                                    <input type="text" name="fuel" class="w-full text-center text-sm py-3 font-sans"
+                                        placeholder="Gasoline">
+                                </div>
+
+                                <div class="space-y-2">
+                                    <label class="text-[11px] font-bold text-slate-400 block pb-1 text-center">السعر
+                                        اليومي (ج.م) <span class="text-red-500">*</span></label>
+                                    <input type="text" name="price" required
+                                        class="w-full text-center text-sm py-3 font-sans text-primary font-bold placeholder-primary/50"
+                                        placeholder="450">
+                                </div>
+                                <div class="space-y-2">
+                                    <label
+                                        class="text-[11px] font-bold text-slate-400 block pb-1 text-center">الحالة</label>
+                                    <select name="status" class="w-full text-center text-sm py-3 font-sans">
+                                        <option value="Available">Available</option>
+                                        <option value="Unavailable">Unavailable</option>
+                                    </select>
+                                </div>
+                                <div class="space-y-2">
+                                    <label
+                                        class="text-[11px] font-bold text-slate-400 block pb-1 text-center">اللون</label>
+                                    <input type="text" class="w-full text-center text-sm py-3" placeholder="أسود ملكي">
+                                </div>
+                                <div class="space-y-2">
+                                    <label class="text-[11px] font-bold text-slate-400 block pb-1 text-center">المسافة
+                                        (كم)</label>
+                                    <input type="text" class="w-full text-center text-sm py-3 font-sans"
+                                        placeholder="5000">
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-6 mt-6">
+                                <div class="space-y-2">
+                                    <label class="text-[11px] font-bold text-slate-400 block pb-1 text-right">الصورة
+                                        الأساسية (رفع) <span class="text-red-500">*</span></label>
+                                    <input type="file" name="image" accept="image/*"
+                                        class="w-full py-3 px-4 border border-dashed border-white/20 rounded-xl text-xs text-slate-400 hover:border-primary/50 transition-colors bg-[#12100e] file:bg-primary file:border-none file:text-background-dark file:rounded-lg file:px-4 file:py-1 file:ml-4 file:font-bold file:cursor-pointer cursor-pointer">
+                                </div>
+                                <div class="space-y-2">
+                                    <label class="text-[11px] font-bold text-slate-400 block pb-1 text-right">صور إضافية
+                                        (اختياري)</label>
+                                    <button type="button"
+                                        class="w-full py-4 border border-dashed border-white/20 rounded-xl text-xs text-slate-400/50 flex justify-center items-center gap-2 bg-[#12100e] cursor-not-allowed">
+                                        <span class="material-symbols-outlined text-lg">collections</span> قريباً في
+                                        التحديث القادم
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="pt-6">
+                                <button type="submit"
+                                    class="bg-primary hover:bg-primary/90 text-background-dark px-10 py-3.5 rounded-xl font-bold text-sm shadow-xl transition-transform active:scale-95 flex items-center gap-2 mr-auto">
+                                    <span class="material-symbols-outlined text-lg">add_box</span> إضافة إلى الأسطول
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Cars Table (For admin.js to populate) -->
+                <div class="glass-panel overflow-hidden mt-6">
+                    <div class="overflow-x-auto p-4">
+                        <table class="w-full text-center text-sm">
+                            <thead>
+                                <tr class="text-slate-500 text-[11px] font-bold border-b border-white/5">
+                                    <th class="py-4 px-4 font-medium">المركبة</th>
+                                    <th class="py-4 px-4 font-medium">الفئة</th>
+                                    <th class="py-4 px-4 font-medium">السعر</th>
+                                    <th class="py-4 px-4 font-medium">الحالة</th>
+                                    <th class="py-4 px-4 font-medium">خيارات</th>
+                                </tr>
+                            </thead>
+                            <tbody id="cars-tbody" class="divide-y divide-white/5"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- BLOGS VIEW -->
+            <div id="blogs-view" class="hidden space-y-6">
+                <!-- Blogs panel to be populated by JS similarly -->
+                <div class="glass-panel overflow-hidden">
+                    <div class="p-6 border-b border-white/5 flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <span class="material-symbols-outlined text-primary">post_add</span>
+                            <h3 class="text-lg font-bold">إضافة مقال جديد</h3>
+                        </div>
+                    </div>
+                    <form id="blog-form" class="p-8 space-y-6">
+                        <div>
+                            <label class="text-[11px] font-bold text-slate-400 block pb-2 text-right">عنوان
+                                المقال</label>
+                            <input type="text" name="title" required class="w-full px-4 py-3 text-sm">
+                        </div>
+                        <div>
+                            <label class="text-[11px] font-bold text-slate-400 block pb-2 text-right">المحتوى</label>
+                            <textarea name="content" required rows="5" class="w-full px-4 py-3 text-sm"></textarea>
+                        </div>
+                        <div>
+                            <label class="text-[11px] font-bold text-slate-400 block pb-2 text-right">صورة
+                                المقال</label>
+                            <input type="file" name="image" accept="image/*"
+                                class="w-full py-3 px-4 file:bg-primary file:border-none file:text-background-dark file:rounded-lg file:px-4 file:py-1 file:mr-4 file:text-xs file:font-bold">
+                        </div>
+                        <div class="pt-4 flex justify-end">
+                            <button type="submit"
+                                class="bg-primary hover:bg-primary/90 text-background-dark px-10 py-3.5 rounded-xl font-bold text-sm shadow-xl transition-transform active:scale-95">نشر
+                                المقال</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Blogs Table (For admin.js to populate) -->
+                <div class="glass-panel overflow-hidden mt-6">
+                    <div class="overflow-x-auto p-4">
+                        <table class="w-full text-center text-sm">
+                            <thead>
+                                <tr class="text-slate-500 text-[11px] font-bold border-b border-white/5">
+                                    <th class="py-4 px-4 font-medium">العنوان</th>
+                                    <th class="py-4 px-4 font-medium">المؤلف</th>
+                                    <th class="py-4 px-4 font-medium">التاريخ</th>
+                                    <th class="py-4 px-4 font-medium">خيارات</th>
+                                </tr>
+                            </thead>
+                            <tbody id="blogs-tbody" class="divide-y divide-white/5"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- BOOKINGS VIEW -->
+            <div id="bookings-view" class="hidden space-y-6">
+                <div class="glass-panel p-6">
+                    <div class="flex flex-row-reverse gap-4">
+                        <div class="flex-1 relative">
+                            <label
+                                class="text-[11px] font-bold text-slate-400 block pb-2 text-right absolute -top-6 right-0">تصفية
+                                حسب الحالة</label>
+                            <select class="w-full py-3 px-4 text-sm">
+                                <option>كل الحالات</option>
+                            </select>
+                        </div>
+                        <div class="flex-1 relative">
+                            <label
+                                class="text-[11px] font-bold text-slate-400 block pb-2 text-right absolute -top-6 right-0">تاريخ
+                                الاستلام</label>
+                            <input type="date" class="w-full py-3 px-4 text-sm font-sans" dir="ltr">
+                        </div>
+                        <button
+                            class="bg-primary text-background-dark px-10 mt-1.5 rounded-xl font-bold text-sm shrink-0">تطبيق</button>
+                    </div>
+                </div>
+
+                <div class="glass-panel overflow-hidden">
+                    <div class="p-6 border-b border-white/5 flex items-center justify-between">
+                        <div class="flex flex-col">
+                            <h3 class="text-lg font-bold">قائمة الحجوزات</h3>
+                            <span class="text-xs text-primary font-bold">عدد الحجوزات: <span class="text-white"
+                                    id="booking-count">0</span></span>
+                        </div>
+                        <button
+                            class="bg-primary/20 text-primary hover:bg-primary hover:text-black transition-colors px-6 py-2.5 rounded-xl font-bold text-xs flex items-center gap-2">
+                            حجز جديد <span class="material-symbols-outlined text-sm">add</span>
+                        </button>
+                    </div>
+                    <div class="overflow-x-auto p-4">
+                        <table class="w-full text-center text-sm">
+                            <thead>
+                                <tr class="text-slate-500 text-[11px] font-bold">
+                                    <th class="py-4 px-4 font-medium">المعرف والتاريخ</th>
+                                    <th class="py-4 px-4 font-medium">تفاصيل العميل</th>
+                                    <th class="py-4 px-4 font-medium">السيارة المختارة</th>
+                                    <th class="py-4 px-4 font-medium">المبلغ الإجمالي</th>
+                                    <th class="py-4 px-4 font-medium">الحالة</th>
+                                    <th class="py-4 px-4 font-medium">إجراءات</th>
+                                </tr>
+                            </thead>
+                            <tbody id="bookings-tbody" class="divide-y divide-white/5">
+                                <tr>
+                                    <td colspan="6" class="py-16 text-slate-500">
+                                        <div class="flex flex-col items-center gap-3"><span
+                                                class="material-symbols-outlined text-3xl opacity-50 text-slate-400 p-4 border border-slate-700 rounded-2xl">event_busy</span>لا
+                                            توجد حجوزات متاحة حالياً</div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- HISTORY VIEW -->
+            <div id="history-view" class="hidden space-y-6">
+                <div class="glass-panel p-6">
+                    <div class="flex flex-row-reverse gap-4">
+                        <div class="flex-1 relative">
+                            <span
+                                class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-slate-500">search</span>
+                            <label
+                                class="text-[11px] font-bold text-slate-400 block pb-2 text-right absolute -top-6 right-0">بحث
+                                شامل</label>
+                            <input type="text" class="w-full py-3 pr-12 pl-4 text-sm"
+                                placeholder="اسم العميل، الهاتف، أو الموديل...">
+                        </div>
+                        <div class="flex-[0.5] relative">
+                            <label
+                                class="text-[11px] font-bold text-slate-400 block pb-2 text-right absolute -top-6 right-0">من
+                                تاريخ</label>
+                            <input type="date" class="w-full py-3 px-4 text-sm font-sans" dir="ltr">
+                        </div>
+                        <div class="flex-[0.5] relative">
+                            <label
+                                class="text-[11px] font-bold text-slate-400 block pb-2 text-right absolute -top-6 right-0">إلى
+                                تاريخ</label>
+                            <input type="date" class="w-full py-3 px-4 text-sm font-sans" dir="ltr">
+                        </div>
+                        <div class="flex gap-2 items-end">
+                            <button
+                                class="bg-primary text-background-dark px-10 py-3 rounded-xl font-bold text-sm shrink-0">تصفية</button>
+                            <button
+                                class="bg-[#1a1714] border border-white/10 hover:bg-white/5 text-white p-3 rounded-xl transition-colors shrink-0">
+                                <span class="material-symbols-outlined text-lg">refresh</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-panel overflow-hidden">
+                    <div class="overflow-x-auto p-4">
+                        <table class="w-full text-center text-sm">
+                            <thead>
+                                <tr class="text-slate-500 text-[11px] font-bold">
+                                    <th class="py-4 px-4 font-medium text-right pr-6">السيارة</th>
+                                    <th class="py-4 px-4 font-medium">العميل</th>
+                                    <th class="py-4 px-4 font-medium">الفترة</th>
+                                    <th class="py-4 px-4 font-medium">التكلفة</th>
+                                    <th class="py-4 px-4 font-medium">الحالة</th>
+                                    <th class="py-4 px-4 font-medium">تاريخ التنفيذ</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-white/5">
+                                <tr class="hover:bg-white/5 transition-colors group">
+                                    <td
+                                        class="py-4 px-4 text-right pr-6 flex items-center justify-end flex-row-reverse gap-3">
+                                        <img src="https://via.placeholder.com/60"
+                                            class="w-12 h-8 rounded-lg object-cover">
+                                        <div class="text-left" dir="ltr">
+                                            <p class="font-bold text-white text-xs">BMW 330i</p>
+                                            <p class="text-[9px] text-primary">2021</p>
+                                        </div>
+                                    </td>
+                                    <td class="py-4 px-4">
+                                        <p class="font-bold text-white text-xs mb-0.5">Abdelrhman Hassan</p>
+                                        <p class="text-[9px] text-slate-500 font-sans">01202132434</p>
+                                    </td>
+                                    <td class="py-4 px-4">
+                                        <div
+                                            class="flex items-center justify-center gap-2 text-[10px] font-sans font-bold text-slate-400">
+                                            <span>Mar 19</span> <span
+                                                class="material-symbols-outlined text-xs">chevron_left</span> <span>Mar
+                                                21</span>
+                                        </div>
+                                    </td>
+                                    <td
+                                        class="py-4 px-4 font-bold font-sans text-primary text-xs relative text-left w-[80px]">
+                                        528 <span class="text-[9px] ml-1 absolute text-slate-400">جم</span></td>
+                                    <td class="py-4 px-4">
+                                        <span
+                                            class="bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 px-3 py-1 rounded-full text-[10px] font-bold">تم
+                                            بنجاح</span>
+                                    </td>
+                                    <td class="py-4 px-4">
+                                        <p class="text-[10px] text-slate-500 font-sans">18/02/2026</p>
+                                        <p class="text-[9px] text-slate-600 font-sans">10:14 PM</p>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ADMINS VIEW -->
+            <div id="admins-view" class="hidden grid-cols-1 md:grid-cols-12 gap-6">
+                <div class="md:col-span-4 max-w-[320px]">
+                    <div class="glass-panel p-6">
+                        <div class="flex justify-between items-center mb-6">
+                            <span
+                                class="material-symbols-outlined text-primary bg-primary/10 p-2 rounded-lg">person_add</span>
+                            <h3 class="text-[15px] font-bold">إضافة مساعد جديد</h3>
+                        </div>
+                        <form id="add-admin-form" class="space-y-4">
+                            <div class="space-y-1">
+                                <label class="text-[10px] font-bold text-slate-400 block pb-1 text-right">اسم
+                                    المستخدم</label>
+                                <input type="text" name="username" required
+                                    class="w-full px-4 py-3 text-[11px] text-right font-sans" placeholder="بحث...">
+                            </div>
+                            <div class="space-y-1">
+                                <label class="text-[10px] font-bold text-slate-400 block pb-1 text-right">كلمة
+                                    المرور</label>
+                                <input type="password" name="password" required
+                                    class="w-full px-4 py-3 text-[11px] text-left font-sans" dir="ltr"
+                                    placeholder="********">
+                            </div>
+                            <div class="space-y-1">
+                                <label class="text-[10px] font-bold text-slate-400 block pb-1 text-right">الصلاحية
+                                    (الدور)</label>
+                                <select name="role" class="w-full px-4 py-3 text-[11px]">
+                                    <option value="مدير عام">مدير عام</option>
+                                    <option value="مسؤول جزئي">مسؤول جزئي</option>
+                                </select>
+                            </div>
+                            <div class="pt-4">
+                                <button type="submit"
+                                    class="w-full bg-primary hover:bg-primary/90 text-background-dark py-3 rounded-xl font-bold text-xs shadow-xl transition-transform active:scale-95 flex items-center justify-center gap-2">
+                                    منح الصلاحية <span class="material-symbols-outlined text-sm">verified_user</span>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="md:col-span-8">
+                    <div class="glass-panel overflow-hidden h-full flex flex-col">
+                        <div class="p-8 pb-4 text-left">
+                            <h3 class="text-xl font-bold">طاقم الإدارة الحالي</h3>
+                            <p class="text-[11px] text-slate-400 mt-1">المسؤولين الذين لديهم صلاحية الوصول للنظام</p>
+                        </div>
+                        <div class="overflow-x-auto p-4 flex-1">
+                            <table class="w-full text-center text-sm">
+                                <thead>
+                                    <tr class="text-slate-500 text-[10px] font-bold border-b border-white/5">
+                                        <th class="py-4 px-4 font-medium text-right pr-12">اسم المستخدم</th>
+                                        <th class="py-4 px-4 font-medium">تاريخ البدء</th>
+                                        <th class="py-4 px-4 font-medium">الدور</th>
+                                        <th class="py-4 px-4 font-medium text-left pl-6">إجراءات</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="admins-tbody" class="divide-y divide-white/5">
+                                    <tr>
+                                        <td colspan="4" class="p-8 text-center text-slate-500">جاري تحميل المديرين...
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+    </div>
+
+    <script>
+        if (!localStorage.getItem('admin')) {
+            window.location.href = 'admin_login.html';
+        }
+
+        // Auth UI
+        document.addEventListener('DOMContentLoaded', () => {
+            const user = JSON.parse(localStorage.getItem('admin'));
+            if (user) {
+                // Option to display username in sidebar
+            }
+
+            document.getElementById('logout-btn').addEventListener('click', () => {
+                localStorage.removeItem('admin');
+                window.location.href = 'admin_login.html';
+            });
+        });
+
+        // Tab switching logic for UI
+        function switchTab(tabId, title, subtitle) {
+            document.querySelectorAll('main > div > div[id$="-view"]').forEach(el => {
+                el.classList.add('hidden');
+                el.classList.remove('md:grid');
+            });
+
+            const targetView = document.getElementById(tabId + '-view');
+            targetView.classList.remove('hidden');
+            if (tabId === 'admins') {
+                targetView.classList.add('md:grid');
+            }
+
+            document.querySelectorAll('aside nav button').forEach(el => {
+                el.classList.remove('bg-primary', 'text-background-dark');
+                el.classList.add('text-slate-400');
+            });
+
+            const activeBtn = document.getElementById('tab-' + tabId);
+            activeBtn.classList.remove('text-slate-400');
+            activeBtn.classList.add('bg-primary', 'text-background-dark');
+
+            document.getElementById('page-title').innerText = title;
+            document.getElementById('page-subtitle').innerText = subtitle;
+        }
+    </script>
+    <!-- Booking Detail Modal -->
+    <div id="booking-modal" class="fixed inset-0 z-[60] hidden bg-black/80 backdrop-blur-sm flex items-center justify-center p-6">
+        <div class="bg-surface w-full max-w-2xl rounded-3xl overflow-hidden border border-white/5 shadow-2xl">
+            <div class="p-8 border-b border-white/5 flex justify-between items-center">
+                <h3 class="text-2xl font-bold">تفاصيل الحجز</h3>
+                <button onclick="closeBookingModal()" class="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center hover:bg-white/10 transition-colors">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+            <div id="booking-modal-content" class="p-8 space-y-6 max-h-[70vh] overflow-y-auto text-right">
+                <!-- Populated by JS -->
+            </div>
+        </div>
+    </div>
+
+    <script src="admin.js"></script>
+</body>
+
+</html>
