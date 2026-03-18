@@ -123,6 +123,16 @@
                 <span class="material-symbols-outlined text-xl">history</span>
                 <span>سجل الحجوزات</span>
             </button>
+            <button id="tab-reports" onclick="switchTab('reports', 'التقارير المالية', 'تحليل الدخل والأداء المالي')"
+                class="w-full flex items-center gap-4 px-5 py-3.5 rounded-2xl text-slate-400 hover:text-white hover:bg-white/5 transition-all">
+                <span class="material-symbols-outlined text-xl">payments</span>
+                <span>التقارير المالية</span>
+            </button>
+            <button id="tab-promos" onclick="switchTab('promos', 'إدارة أكواد الخصم', 'إنشاء والتحكم في عروض الخصم')"
+                class="w-full flex items-center gap-4 px-5 py-3.5 rounded-2xl text-slate-400 hover:text-white hover:bg-white/5 transition-all">
+                <span class="material-symbols-outlined text-xl">sell</span>
+                <span>أكواد الخصم</span>
+            </button>
 
             <div class="pt-8 pb-2">
                 <span class="text-[10px] text-slate-600 px-5 font-bold uppercase tracking-widest">النظام</span>
@@ -559,6 +569,115 @@
                                 </tr>
                             </tbody>
                         </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- REPORTS VIEW -->
+            <div id="reports-view" class="hidden space-y-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="glass-panel p-10 flex flex-col justify-between min-h-[200px] border-r-4 border-r-primary">
+                        <div>
+                            <div class="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center text-primary mb-6">
+                                <span class="material-symbols-outlined text-3xl">calendar_view_week</span>
+                            </div>
+                            <h4 class="text-slate-400 text-xs font-bold uppercase tracking-[0.2em] mb-2">إجمالي الدخل الأسبوعي</h4>
+                        </div>
+                        <div class="flex items-baseline gap-3">
+                            <span id="weekly-income" class="text-6xl font-black text-white font-sans tracking-tight cursor-default">0</span>
+                            <span class="text-sm font-bold text-slate-500 uppercase">ج.م</span>
+                        </div>
+                    </div>
+
+                    <div class="glass-panel p-10 flex flex-col justify-between min-h-[200px] border-r-4 border-r-emerald-500">
+                        <div>
+                            <div class="w-14 h-14 rounded-2xl bg-emerald-500/10 flex items-center justify-center text-emerald-500 mb-6">
+                                <span class="material-symbols-outlined text-3xl">payments</span>
+                            </div>
+                            <h4 class="text-slate-400 text-xs font-bold uppercase tracking-[0.2em] mb-2">إجمالي الدخل الشهري</h4>
+                        </div>
+                        <div class="flex items-baseline gap-3">
+                            <span id="monthly-income" class="text-6xl font-black text-white font-sans tracking-tight cursor-default">0</span>
+                            <span class="text-sm font-bold text-slate-500 uppercase">ج.م</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-panel p-8">
+                    <div class="flex items-center gap-3 mb-6">
+                        <span class="material-symbols-outlined text-primary">info</span>
+                        <p class="text-xs text-slate-400 font-bold">تعتمد هذه التقارير على الحجوزات التي تمت حالتها إلى <span class="text-emerald-500">"Completed"</span> فقط.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PROMOS VIEW -->
+            <div id="promos-view" class="hidden grid grid-cols-1 md:grid-cols-12 gap-8">
+                <div class="md:col-span-4">
+                    <div class="glass-panel p-8">
+                        <div class="flex items-center gap-3 mb-8">
+                            <span class="material-symbols-outlined text-primary bg-primary/10 p-2 rounded-xl">add_card</span>
+                            <h3 class="text-xl font-bold">كود خصم جديد</h3>
+                        </div>
+                        <form id="promo-form" class="space-y-5">
+                            <div class="space-y-1.5">
+                                <label class="text-[11px] font-bold text-slate-500 block mr-2 text-right">رمز الكود</label>
+                                <input type="text" name="code" required class="w-full px-5 py-4 text-sm font-sans uppercase tracking-widest" placeholder="EX: SUMMER20">
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="space-y-1.5">
+                                    <label class="text-[11px] font-bold text-slate-500 block mr-2 text-right">نوع الخصم</label>
+                                    <select name="discount_type" class="w-full px-5 py-4 text-sm">
+                                        <option value="Percentage">نسبة (%)</option>
+                                        <option value="Fixed">مبلغ ثابت</option>
+                                    </select>
+                                </div>
+                                <div class="space-y-1.5">
+                                    <label class="text-[11px] font-bold text-slate-500 block mr-2 text-right">القيمة</label>
+                                    <input type="number" name="discount_value" required class="w-full px-5 py-4 text-sm font-sans" placeholder="10">
+                                </div>
+                            </div>
+                            <div class="space-y-1.5">
+                                <label class="text-[11px] font-bold text-slate-500 block mr-2 text-right">تاريخ الانتهاء (اختياري)</label>
+                                <input type="date" name="expiry_date" class="w-full px-5 py-4 text-sm font-sans" dir="ltr">
+                            </div>
+                            <div class="space-y-1.5">
+                                <label class="text-[11px] font-bold text-slate-500 block mr-2 text-right">حد الاستخدام</label>
+                                <input type="number" name="usage_limit" value="100" class="w-full px-5 py-4 text-sm font-sans">
+                            </div>
+                            <div class="pt-4">
+                                <button type="submit" class="w-full bg-primary hover:bg-primary/90 text-background-dark py-4 rounded-2xl font-black text-sm shadow-xl transition-all active:scale-95">
+                                    إنشاء الكود
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="md:col-span-8">
+                    <div class="glass-panel overflow-hidden h-full flex flex-col">
+                        <div class="p-8 pb-4">
+                            <h3 class="text-xl font-bold">الأكواد النشطة</h3>
+                            <p class="text-xs text-slate-500 mt-1">إدارة أكواد الخصم المفعلة حالياً</p>
+                        </div>
+                        <div class="overflow-x-auto p-4 flex-1">
+                            <table class="w-full text-center">
+                                <thead>
+                                    <tr class="text-slate-500 text-[11px] font-bold border-b border-white/5">
+                                        <th class="py-4 px-4 font-medium text-right pr-6">الكود</th>
+                                        <th class="py-4 px-4 font-medium">الخصم</th>
+                                        <th class="py-4 px-4 font-medium">الاستخدام</th>
+                                        <th class="py-4 px-4 font-medium">تاريخ الانتهاء</th>
+                                        <th class="py-4 px-4 font-medium text-left pl-6">إجراءات</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="promos-tbody" class="divide-y divide-white/5">
+                                    <tr>
+                                        <td colspan="5" class="py-12 text-slate-500 text-sm">جاري تحميل الأكواد...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>

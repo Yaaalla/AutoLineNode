@@ -330,6 +330,122 @@ document.addEventListener('DOMContentLoaded', () => {
         loadAdmins();
     };
 
+    // =====================================
+    // PROMOS
+    // =====================================
+    const promosTbody = document.getElementById('promos-tbody');
+    const promoForm = document.getElementById('promo-form');
+
+    async function loadPromos() {
+        if(!promosTbody) return;
+        try {
+            const res = await fetch('/api/promo-codes');
+            const data = await res.json();
+            promosTbody.innerHTML = '';
+            
+            if(data.length === 0) {
+                promosTbody.innerHTML = '<tr><td colspan="5" class="py-12 text-center text-slate-500 text-sm">لا توجد أكواد خصم</td></tr>';
+                return;
+            }
+
+            data.forEach(p => {
+                promosTbody.innerHTML += `
+                <tr class="hover:bg-white/5 transition-colors group text-sm">
+                    <td class="py-4 px-4 text-right pr-6">
+                        <span class="bg-primary/10 text-primary px-3 py-1 rounded-lg font-bold font-sans tracking-widest">${p.code}</span>
+                    </td>
+                    <td class="py-4 px-4 font-bold">
+                        ${p.discount_value}${p.discount_type === 'Percentage' ? '%' : ' ج.م'}
+                    </td>
+                    <td class="py-4 px-4 font-sans text-xs">
+                        <span class="text-white">${p.used_count}</span> / ${p.usage_limit}
+                    </td>
+                    <td class="py-4 px-4 font-sans text-xs text-slate-400">
+                        ${p.expiry_date ? new Date(p.expiry_date).toLocaleDateString() : 'بدون انتهاء'}
+                    </td>
+                    <td class="py-4 px-4 text-left pl-6">
+                        <button onclick="deletePromo(${p.id})" class="w-8 h-8 rounded-lg bg-red-500/10 text-red-500 hover:bg-red-500/20 flex items-center justify-center transition-colors">
+                            <span class="material-symbols-outlined text-sm">delete</span>
+                        </button>
+                    </td>
+                </tr>`;
+            });
+        } catch(e) { console.error(e); }
+    }
+
+    if(promoForm) {
+        promoForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(promoForm);
+            const data = Object.fromEntries(formData.entries());
+            
+            const res = await fetch('/api/promo-codes', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(data)
+            });
+            
+            if(res.ok) {
+                promoForm.reset();
+                loadPromos();
+                alert('تم إضافة كود الخصم بنجاح');
+            }
+        });
+    }
+
+    window.deletePromo = async (id) => {
+        if(!confirm('حذف هذا الكود؟')) return;
+        await fetch(`/api/promo-codes/${id}`, { method: 'DELETE' });
+        loadPromos();
+    };
+
+    // Update loadData or switchTab to handle new sections
+    // Note: The previous code used switchTab in HTML but loadData was called at the end.
+    // I will define switchTab globally to ensure it works with the HTML calls.
+    window.switchTab = (tabId, title, subtitle) => {
+        // Hide all views
+        document.querySelectorAll('main > div > div[id$="-view"]').forEach(el => {
+            el.classList.add('hidden');
+            el.classList.remove('md:grid');
+        });
+
+        // Show target view
+        const targetView = document.getElementById(tabId + '-view');
+        if (targetView) {
+            targetView.classList.remove('hidden');
+            if (tabId === 'admins' || tabId === 'promos') {
+                targetView.classList.add('md:grid');
+            }
+        }
+
+        // Update Nav
+        document.querySelectorAll('aside nav button').forEach(el => {
+            el.classList.remove('bg-primary', 'text-background-dark');
+            el.classList.add('text-slate-400');
+        });
+
+        const activeBtn = document.getElementById('tab-' + tabId);
+        if (activeBtn) {
+            activeBtn.classList.remove('text-slate-400');
+            activeBtn.classList.add('bg-primary', 'text-background-dark');
+        }
+
+        // Update Title
+        const pageTitle = document.getElementById('page-title');
+        const pageSubtitle = document.getElementById('page-subtitle');
+        if (pageTitle) pageTitle.innerText = title;
+        if (pageSubtitle) pageSubtitle.innerText = subtitle;
+
+        // Load Data per section
+        if (tabId === 'overview') loadStats();
+        if (tabId === 'fleet') loadCars();
+        if (tabId === 'blogs') loadBlogs();
+        if (tabId === 'bookings') loadBookings();
+        if (tabId === 'admins') loadAdmins();
+        if (tabId === 'reports') loadStats();
+        if (tabId === 'promos') loadPromos();
+    };
+
     // Initial Load
-    loadData('overview');
+    switchTab('overview', 'لوحة التحكم', 'مرحباً بك في نظام إدارة أوتو لاين');
 });

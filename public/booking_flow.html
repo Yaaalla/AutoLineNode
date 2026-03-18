@@ -104,6 +104,16 @@
                             </div>
                         </div>
 
+                        <!-- Promo Code Section -->
+                        <div class="space-y-3">
+                            <label class="block text-xs font-bold text-slate-400 mr-2">كود الخصم (اختياري)</label>
+                            <div class="flex gap-4">
+                                <input id="promo_code_input" class="flex-1 bg-[#1c1c1c] border-0 rounded-2xl px-6 py-5 text-white focus:ring-1 focus:ring-primary/50 font-bold uppercase tracking-widest placeholder:normal-case font-sans" placeholder="Enter code" type="text"/>
+                                <button type="button" id="apply-promo-btn" class="px-8 bg-white/5 hover:bg-white/10 text-white rounded-2xl font-bold transition-all border border-white/5">تطبيق</button>
+                            </div>
+                            <p id="promo-message" class="text-[10px] font-bold mt-2 mr-2 hidden"></p>
+                        </div>
+
 
                         <div class="pt-6">
                             <button type="submit" id="submit-booking-btn" class="w-full bg-primary hover:bg-white text-background-dark font-black py-6 rounded-2xl transition-all shadow-[0_20px_50px_rgba(201,169,110,0.2)] text-xl">

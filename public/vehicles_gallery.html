@@ -90,30 +90,44 @@
 <div class="bg-surface border border-white/5 rounded-[2.5rem] p-10 text-right reveal active shadow-2xl mt-[-50px] relative z-30">
 <form id="filter-form" class="flex flex-col lg:flex-row items-end gap-10">
 <div class="flex flex-wrap flex-1 gap-10 w-full justify-end">
-<!-- Brand Filter -->
-<div class="flex-1 min-w-[220px]">
-<label class="block text-[10px] font-black text-primary mb-3 uppercase tracking-[0.2em]">الماركة</label>
-<select id="brand-filter" class="w-full bg-background-dark/50 border-white/10 rounded-2xl text-white focus:ring-primary focus:border-primary px-6 py-4 text-sm font-bold appearance-none transition-all">
-<option value="all">كل الماركات الفاخرة</option>
-</select>
-</div>
+                <!-- Brand Filter -->
+                <div class="flex-1 min-w-[180px]">
+                    <label class="block text-[10px] font-black text-primary mb-3 uppercase tracking-[0.2em]">الماركة</label>
+                    <select id="brand-filter" class="w-full bg-background-dark/50 border-white/10 rounded-2xl text-white focus:ring-primary focus:border-primary px-6 py-4 text-sm font-bold appearance-none transition-all">
+                        <option value="all">كل الماركات</option>
+                    </select>
+                </div>
 
-<!-- Color Filter -->
-<div class="flex-1 min-w-[220px]">
-<label class="block text-[10px] font-black text-primary mb-3 uppercase tracking-[0.2em]">اللون</label>
-<select id="color-filter" class="w-full bg-background-dark/50 border-white/10 rounded-2xl text-white focus:ring-primary focus:border-primary px-6 py-4 text-sm font-bold appearance-none transition-all">
-<option value="all">كل الألوان المتاحة</option>
-</select>
-</div>
+                <!-- Seats Filter -->
+                <div class="flex-1 min-w-[180px]">
+                    <label class="block text-[10px] font-black text-primary mb-3 uppercase tracking-[0.2em]">المقاعد</label>
+                    <select id="seats-filter" class="w-full bg-background-dark/50 border-white/10 rounded-2xl text-white focus:ring-primary focus:border-primary px-6 py-4 text-sm font-bold appearance-none transition-all">
+                        <option value="all">الكل</option>
+                        <option value="2">2 مقعد</option>
+                        <option value="4">4 مقاعد</option>
+                        <option value="5">5 مقاعد</option>
+                        <option value="7">7 مقاعد</option>
+                    </select>
+                </div>
 
-<!-- Max Price Filter -->
-<div class="flex-1 min-w-[220px]">
-<label class="block text-[10px] font-black text-primary mb-3 uppercase tracking-[0.2em]">السعر (حد أقصى)</label>
-<div class="relative">
-<input id="price-filter" type="number" placeholder="مثال: 5000" class="w-full bg-background-dark/50 border-white/10 rounded-2xl text-white focus:ring-primary focus:border-primary px-6 py-4 text-sm font-bold pr-16"/>
-<span class="absolute left-6 top-1/2 -translate-y-1/2 text-slate-500 text-xs font-bold">ج.م</span>
-</div>
-</div>
+                <!-- Transmission Filter -->
+                <div class="flex-1 min-w-[180px]">
+                    <label class="block text-[10px] font-black text-primary mb-3 uppercase tracking-[0.2em]">الناقل</label>
+                    <select id="transmission-filter" class="w-full bg-background-dark/50 border-white/10 rounded-2xl text-white focus:ring-primary focus:border-primary px-6 py-4 text-sm font-bold appearance-none transition-all">
+                        <option value="all">الكل</option>
+                        <option value="Automatic">أوتوماتيك</option>
+                        <option value="Manual">مانيوال</option>
+                    </select>
+                </div>
+
+                <!-- Max Price Filter -->
+                <div class="flex-1 min-w-[180px]">
+                    <label class="block text-[10px] font-black text-primary mb-3 uppercase tracking-[0.2em]">السعر (حد أقصى)</label>
+                    <div class="relative">
+                        <input id="price-filter" type="number" placeholder="مثال: 5000" class="w-full bg-background-dark/50 border-white/10 rounded-2xl text-white focus:ring-primary focus:border-primary px-6 py-4 text-sm font-bold pr-16"/>
+                        <span class="absolute left-6 top-1/2 -translate-y-1/2 text-slate-500 text-xs font-bold font-sans">ج.م</span>
+                    </div>
+                </div>
 </div>
 
 <button type="submit" class="bg-primary text-background-dark font-black py-5 px-12 rounded-2xl hover:bg-white transition-all shadow-[0_0_30px_rgba(201,169,110,0.3)] flex items-center justify-center gap-3 h-[60px] min-w-[150px]">

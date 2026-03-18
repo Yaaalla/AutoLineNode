@@ -2,7 +2,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     const carsGrid = document.getElementById('cars-grid');
     const filterForm = document.getElementById('filter-form');
     const brandFilter = document.getElementById('brand-filter');
-    const colorFilter = document.getElementById('color-filter');
+    const seatsFilter = document.getElementById('seats-filter');
+    const transmissionFilter = document.getElementById('transmission-filter');
     const priceFilter = document.getElementById('price-filter');
     
     if (!carsGrid) return;
@@ -25,20 +26,12 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     function populateFilters(cars) {
         const brands = [...new Set(cars.map(c => c.brand))].sort();
-        const colors = [...new Set(cars.map(c => c.color))].filter(c => c).sort();
-
+        
         brands.forEach(brand => {
             const opt = document.createElement('option');
             opt.value = brand;
             opt.textContent = brand;
             brandFilter.appendChild(opt);
-        });
-
-        colors.forEach(color => {
-            const opt = document.createElement('option');
-            opt.value = color;
-            opt.textContent = color;
-            colorFilter.appendChild(opt);
         });
     }
 
@@ -68,8 +61,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                 <div class="p-10 flex flex-1 flex-col">
                     <div class="flex justify-between items-start mb-8">
                         <div class="text-left">
-                            ${hasDiscount ? `<p class="text-slate-500 line-through text-xs mb-1 font-bold">${car.price} ج.م</p>` : ''}
-                            <p class="text-primary font-black text-3xl tracking-tight">${currentPrice}</p>
+                            ${hasDiscount ? `<p class="text-slate-500 line-through text-xs mb-1 font-bold font-sans">${car.price} ج.م</p>` : ''}
+                            <p class="text-primary font-black text-3xl tracking-tight font-sans">${currentPrice}</p>
                             <p class="text-slate-500 text-[10px] uppercase font-black tracking-[0.2em] mt-1">ج.م / يوم</p>
                         </div>
                         <div class="text-right">
@@ -84,15 +77,15 @@ document.addEventListener('DOMContentLoaded', async () => {
                             <span class="material-symbols-outlined text-xl text-primary/50 group-hover:text-primary transition-colors">settings</span>
                         </div>
                         <div class="flex items-center gap-3 justify-end text-slate-400 group/icon">
-                            <span class="text-xs font-bold group-hover:text-white transition-colors">${car.fuel || '95'}</span>
+                            <span class="text-xs font-bold group-hover:text-white transition-colors font-sans">${car.seats || '5'} مقاعد</span>
+                            <span class="material-symbols-outlined text-xl text-primary/50 group-hover:text-primary transition-colors">event_seat</span>
+                        </div>
+                        <div class="flex items-center gap-3 justify-end text-slate-400 group/icon">
+                            <span class="text-xs font-bold group-hover:text-white transition-colors">${car.fuel || 'بنزين'}</span>
                             <span class="material-symbols-outlined text-xl text-primary/50 group-hover:text-primary transition-colors">local_gas_station</span>
                         </div>
                         <div class="flex items-center gap-3 justify-end text-slate-400 group/icon">
-                            <span class="text-xs font-bold group-hover:text-white transition-colors">${car.color || 'فضي'}</span>
-                            <span class="material-symbols-outlined text-xl text-primary/50 group-hover:text-primary transition-colors">palette</span>
-                        </div>
-                        <div class="flex items-center gap-3 justify-end text-slate-400 group/icon">
-                            <span class="text-xs font-bold group-hover:text-white transition-colors">${car.mileage || '1,000'} KM</span>
+                            <span class="text-xs font-bold group-hover:text-white transition-colors font-sans">${car.power || '250'} HP</span>
                             <span class="material-symbols-outlined text-xl text-primary/50 group-hover:text-primary transition-colors">speed</span>
                         </div>
                     </div>
@@ -108,14 +101,16 @@ document.addEventListener('DOMContentLoaded', async () => {
     filterForm.addEventListener('submit', (e) => {
         e.preventDefault();
         const brand = brandFilter.value;
-        const color = colorFilter.value;
+        const seats = seatsFilter.value;
+        const trans = transmissionFilter.value;
         const maxPrice = priceFilter.value ? parseFloat(priceFilter.value) : Infinity;
 
         const filtered = allCars.filter(car => {
             const matchesBrand = brand === 'all' || car.brand === brand;
-            const matchesColor = color === 'all' || car.color === color;
+            const matchesSeats = seats === 'all' || car.seats == seats;
+            const matchesTrans = trans === 'all' || car.transmission === trans;
             const matchesPrice = (car.discount_price || car.price) <= maxPrice;
-            return matchesBrand && matchesColor && matchesPrice;
+            return matchesBrand && matchesSeats && matchesTrans && matchesPrice;
         });
 
         renderCars(filtered);
