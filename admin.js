@@ -51,16 +51,43 @@ document.addEventListener('DOMContentLoaded', () => {
         if(title) document.getElementById('page-title').innerText = title;
         if(subtitle) document.getElementById('page-subtitle').innerText = subtitle;
 
+        // Close sidebar on mobile after switching
+        if (window.innerWidth < 1024) {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+            if (sidebar) sidebar.classList.add('translate-x-full');
+            if (overlay) overlay.classList.add('hidden');
+        }
+
         activeTab = tabId;
         loadData(tabId);
     };
 
+    // Role-based Access Control
+    const adminData = JSON.parse(localStorage.getItem('admin') || '{}');
+    const isAdmin = adminData.role === 'مسؤول عام';
+    
+    if (!isAdmin) {
+        // Hide sensitive tabs for Managers
+        if (tabs.overview) tabs.overview.classList.add('hidden');
+        if (tabs.fleet) tabs.fleet.classList.add('hidden');
+        if (tabs.admins) tabs.admins.classList.add('hidden');
+    }
+
+    // Load Initial Tab
+    if (!isAdmin) {
+        switchTab('bookings', 'إدارة الحجوزات', 'إدارة وتأكيد حجوزات العملاء');
+    } else {
+        switchTab('overview', 'لوحة التحكم', 'مرحباً بك في نظام إدارة أوتو لاين');
+    }
+
     function loadData(tab) {
-        if (tab === 'fleet') loadCars();
+        if (tab === 'fleet' && isAdmin) loadCars();
         else if (tab === 'blogs') loadBlogs();
         else if (tab === 'overview') { loadStats(); loadRecentBookings(); }
-        else if (tab === 'bookings' || tab === 'history') loadBookings();
-        else if (tab === 'admins') loadAdmins();
+        else if (tab === 'bookings') loadBookings();
+        else if (tab === 'history' && isAdmin) loadBookings();
+        else if (tab === 'admins' && isAdmin) loadAdmins();
     }
 
     // =====================================
@@ -75,7 +102,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const cars = await carsRes.json();
             const bookings = await bookingsRes.json();
 
-            document.getElementById('stat-total-cars').innerText = bookings.length;
+            document.getElementById('stat-total-bookings').innerText = bookings.length;
             document.getElementById('stat-pending-bookings').innerText = bookings.filter(b => b.status === 'Pending').length;
             document.getElementById('stat-completed-bookings').innerText = bookings.filter(b => b.status === 'Completed').length;
             document.getElementById('stat-ongoing-bookings').innerText = bookings.filter(b => b.status === 'Ongoing').length;
@@ -83,8 +110,38 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     async function loadRecentBookings() {
-        // This usually populates the table in the overview
-        // We can reuse loadBookings logic or have a separate one
+        const tbody = document.querySelector('#overview-view table tbody');
+        if(!tbody) return;
+        try {
+            const res = await fetch('/api/bookings');
+            const data = await res.json();
+            const recent = data.slice(0, 5); // Latest 5
+            tbody.innerHTML = '';
+            
+            recent.forEach(b => {
+                const bookingJson = encodeURIComponent(JSON.stringify(b).replace(/'/g, "\\'"));
+                tbody.innerHTML += `
+                <tr class="border-b border-white/5 last:border-0 hover:bg-white/5 transition-colors">
+                    <td class="py-4 px-4 text-right">
+                        <p class="font-bold text-white text-xs">${b.customer_name}</p>
+                        <p class="text-[9px] text-slate-500 font-sans">${b.customer_phone}</p>
+                    </td>
+                    <td class="py-4 px-4 font-bold text-primary text-xs text-center">${b.brand} ${b.model}</td>
+                    <td class="py-4 px-4 text-center">
+                        <span class="px-3 py-1 rounded-full text-[9px] font-bold ${
+                            b.status === 'Pending' ? 'bg-orange-500/10 text-orange-500' :
+                            b.status === 'Ongoing' ? 'bg-blue-500/10 text-blue-500' :
+                            'bg-emerald-500/10 text-emerald-500'
+                        }">${b.status}</span>
+                    </td>
+                    <td class="py-4 px-4 text-left">
+                        <button onclick="viewBookingDetails('${bookingJson}')" class="text-primary hover:text-white transition-colors">
+                                                        <i class="fa-solid fa-eye text-lg"></i>
+                        </button>
+                    </td>
+                </tr>`;
+            });
+        } catch(e) { console.error(e); }
     }
 
     // =====================================
@@ -93,6 +150,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const carsTbody = document.getElementById('cars-tbody');
     const carForm = document.getElementById('car-form');
     let currentEditCarId = null;
+    let localCars = [];
 
     async function loadCars() {
         if(!carsTbody) return;
@@ -100,15 +158,19 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             const res = await fetch('/api/cars');
             const data = await res.json();
+            localCars = data;
             carsTbody.innerHTML = '';
-            
             if(data.length === 0) {
-                carsTbody.innerHTML = '<tr><td colspan="5" class="py-16 text-center text-slate-500">لا توجد سيارات</td></tr>';
+                carsTbody.innerHTML = `<tr><td colspan="5" class="py-16 text-center text-slate-500">
+                    <div class="flex flex-col items-center gap-3">
+                                                <i class="fa-solid fa-car-side text-3xl opacity-50 text-slate-400 p-4 border border-slate-700 rounded-2xl"></i>
+                        لا توجد سيارات في الأسطول حالياً
+                    </div>
+                </td></tr>`;
                 return;
             }
 
             data.forEach(car => {
-                const carJson = encodeURIComponent(JSON.stringify(car).replace(/'/g, "\\'"));
                 carsTbody.innerHTML += `
                 <tr class="hover:bg-white/5 transition-colors group text-center">
                     <td class="py-4 px-4 flex items-center justify-center flex-row-reverse gap-3">
@@ -118,18 +180,18 @@ document.addEventListener('DOMContentLoaded', () => {
                             <p class="text-[9px] text-primary">${car.seats || 4} مقاعد</p>
                         </div>
                     </td>
-                    <td class="py-4 px-4 font-bold text-slate-300 text-xs">${car.category || 'Luxury'}</td>
+                    <td class="py-4 px-4 font-bold text-slate-300 text-xs">${car.car_condition || 100}%</td>
                     <td class="py-4 px-4 font-bold font-sans text-primary text-xs relative text-left w-[80px]">${car.price} <span class="text-[9px] ml-1 absolute text-slate-400">جم</span></td>
                     <td class="py-4 px-4">
                         <span class="bg-primary/10 border border-primary/20 text-primary px-3 py-1 rounded-full text-[10px] font-bold">${car.status || 'Available'}</span>
                     </td>
                     <td class="py-4 px-4">
                         <div class="flex items-center justify-center gap-2">
-                            <button onclick="editCar('${carJson}')" class="w-8 h-8 rounded-lg bg-blue-500/10 text-blue-500 hover:bg-blue-500/20 flex items-center justify-center transition-colors">
-                                <span class="material-symbols-outlined text-sm">edit</span>
+                            <button onclick="editCar(${car.id})" class="w-8 h-8 rounded-lg bg-blue-500/10 text-blue-500 hover:bg-blue-500/20 flex items-center justify-center transition-colors">
+                                                                <i class="fa-solid fa-pen-to-square text-sm"></i>
                             </button>
                             <button onclick="deleteCar(${car.id})" class="w-8 h-8 rounded-lg bg-red-500/10 text-red-500 hover:bg-red-500/20 flex items-center justify-center transition-colors">
-                                <span class="material-symbols-outlined text-sm">delete</span>
+                                                                <i class="fa-solid fa-trash-can text-sm"></i>
                             </button>
                         </div>
                     </td>
@@ -160,13 +222,24 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    window.editCar = function(json) {
-        const car = JSON.parse(decodeURIComponent(json));
+    window.editCar = function(id) {
+        const car = localCars.find(c => c.id == id);
+        if (!car) return;
         currentEditCarId = car.id;
-        carForm.brand.value = car.brand;
-        carForm.model.value = car.model;
-        carForm.category.value = car.category;
-        carForm.price.value = car.price;
+        carForm.brand.value = car.brand || '';
+        carForm.model.value = car.model || '';
+        // carForm.category.value = car.category || 'Luxury'; // Removed from form
+        carForm.tire_condition.value = car.tire_condition || '';
+        carForm.car_condition.value = car.car_condition || 100;
+        carForm.price.value = car.price || '';
+        // carForm.power.value = car.power || ''; // Removed from form
+        carForm.seats.value = car.seats || '';
+        carForm.transmission.value = car.transmission || 'Automatic';
+        carForm.fuel.value = car.fuel || '95';
+        // carForm.status.value = car.status || 'Available'; // Removed from form
+        carForm.color.value = car.color || '';
+        carForm.mileage.value = car.mileage || '';
+        carForm.year.value = car.year || '2024';
         carForm.scrollIntoView({ behavior: 'smooth' });
     };
 
@@ -177,27 +250,133 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // =====================================
+    // BLOGS MANAGEMENT
+    // =====================================
+    const blogsTbody = document.getElementById('blogs-tbody');
+    const blogForm = document.getElementById('blog-form');
+    let currentEditBlogId = null;
+
+    async function loadBlogs() {
+        if(!blogsTbody) return;
+        blogsTbody.innerHTML = '<tr><td colspan="4" class="py-16 text-center text-slate-500">جاري التحميل...</td></tr>';
+        try {
+            const res = await fetch('/api/blogs');
+            const data = await res.json();
+            blogsTbody.innerHTML = '';
+            
+            if(data.length === 0) {
+                blogsTbody.innerHTML = `<tr><td colspan="4" class="py-16 text-center text-slate-500">
+                    <div class="flex flex-col items-center gap-3">
+                                                <i class="fa-solid fa-blog text-3xl opacity-50 text-slate-400 p-4 border border-slate-700 rounded-2xl"></i>
+                        لا توجد مقالات منشورة حالياً
+                    </div>
+                </td></tr>`;
+                return;
+            }
+
+            data.forEach(blog => {
+                const blogJson = encodeURIComponent(JSON.stringify(blog).replace(/'/g, "\\'"));
+                blogsTbody.innerHTML += `
+                <tr class="hover:bg-white/5 transition-colors group text-right">
+                    <td class="py-4 px-4 font-bold text-white text-xs">${blog.title}</td>
+                    <td class="py-4 px-4 text-slate-400 text-[10px] uppercase font-bold tracking-widest">${blog.author || 'الادمن'}</td>
+                    <td class="py-4 px-4 text-slate-500 text-[10px] font-sans">${new Date(blog.created_at).toLocaleDateString()}</td>
+                    <td class="py-4 px-4">
+                        <div class="flex items-center justify-center gap-2">
+                            <button onclick="editBlog('${blogJson}')" class="w-8 h-8 rounded-lg bg-blue-500/10 text-blue-500 hover:bg-blue-500/20 flex items-center justify-center transition-colors">
+                                <i class="fa-solid fa-pen-to-square text-sm"></i>
+                            </button>
+                            <button onclick="deleteBlog(${blog.id})" class="w-8 h-8 rounded-lg bg-red-500/10 text-red-500 hover:bg-red-500/20 flex items-center justify-center transition-colors">
+                                                                <i class="fa-solid fa-trash-can text-sm"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>`;
+            });
+        } catch(e) { console.error('Error loading blogs:', e); }
+    }
+
+    if (blogForm) {
+        blogForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(blogForm);
+            try {
+                let url = '/api/blogs';
+                let method = 'POST';
+                if (currentEditBlogId) {
+                    url = '/api/blogs/' + currentEditBlogId;
+                    method = 'PUT';
+                }
+                const res = await fetch(url, { method: method, body: formData });
+                if (res.ok) {
+                    blogForm.reset();
+                    currentEditBlogId = null;
+                    loadBlogs();
+                    alert('تم نشر المقال بنجاح');
+                } else alert('خطأ في النشر');
+            } catch(e) { console.error(e); }
+        });
+    }
+
+    window.editBlog = function(json) {
+        const blog = JSON.parse(decodeURIComponent(json));
+        currentEditBlogId = blog.id;
+        blogForm.title.value = blog.title;
+        blogForm.content.value = blog.content;
+        blogForm.scrollIntoView({ behavior: 'smooth' });
+    };
+
+    window.deleteBlog = async function(id) {
+        if(!confirm('حذف هذا المقال؟')) return;
+        await fetch(`/api/blogs/${id}`, { method: 'DELETE' });
+        loadBlogs();
+    };
+
+    // =====================================
     // BOOKINGS
     // =====================================
     const bookingsTbody = document.getElementById('bookings-tbody');
+    let lastBookingsData = [];
+
     async function loadBookings() {
         if(!bookingsTbody) return;
         try {
             const res = await fetch('/api/bookings');
-            const data = await res.json();
-            bookingsTbody.innerHTML = '';
+            lastBookingsData = await res.json();
+            renderBookings(lastBookingsData);
+        } catch(e) { console.error(e); }
+    }
+
+    function renderBookings(data) {
+        if(!bookingsTbody) return;
+        bookingsTbody.innerHTML = '';
             if(data.length === 0) {
-                bookingsTbody.innerHTML = '<tr><td colspan="6" class="py-16 text-center text-slate-500">لا توجد حجوزات</td></tr>';
+                bookingsTbody.innerHTML = `<tr><td colspan="6" class="py-16 text-slate-500">
+                                        <div class="flex flex-col items-center gap-3"><i class="fa-solid fa-calendar-xmark text-3xl opacity-50 text-slate-400 p-4 border border-slate-700 rounded-2xl"></i>لا توجد حجوزات تطابق هذا البحث</div>
+                </td></tr>`;
                 return;
             }
+            const currentTab = activeTab; // Use the outer scope activeTab
             data.forEach(b => {
+                const isHistory = b.status === 'Completed' || b.status === 'Cancelled';
+                if (currentTab === 'bookings' && isHistory) return;
+                if (currentTab === 'history' && !isHistory) return;
+
+                // Simple XSS protection for user-entered fields
+                const escapeHTML = (str) => String(str).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+                const customerName = escapeHTML(b.customer_name);
+                const customerPhone = escapeHTML(b.customer_phone);
+
                 const bookingJson = encodeURIComponent(JSON.stringify(b).replace(/'/g, "\\'"));
                 bookingsTbody.innerHTML += `
                 <tr class="hover:bg-white/5 transition-colors">
-                    <td class="py-4 px-4 font-sans font-bold text-slate-300">${b.booking_ref}</td>
                     <td class="py-4 px-4">
-                        <p class="font-bold text-white text-xs text-right">${b.customer_name}</p>
-                        <p class="text-[9px] text-slate-500 text-right">${b.customer_phone}</p>
+                        <p class="font-bold text-white text-xs text-right font-sans">${b.booking_ref}</p>
+                        <p class="text-[9px] text-slate-500 text-right font-sans">${new Date(b.created_at).toLocaleDateString()}</p>
+                    </td>
+                    <td class="py-4 px-4">
+                        <p class="font-bold text-white text-xs text-right">${customerName}</p>
+                        <p class="text-[9px] text-slate-500 text-right font-sans">${customerPhone}</p>
                     </td>
                     <td class="py-4 px-4 font-bold text-primary text-xs text-center">${b.brand} ${b.model}</td>
                     <td class="py-4 px-4 font-bold font-sans text-xs">${b.total_amount} جم</td>
@@ -212,14 +391,39 @@ document.addEventListener('DOMContentLoaded', () => {
                     <td class="py-4 px-4">
                         <div class="flex items-center justify-center gap-2">
                             <button onclick="viewBookingDetails('${bookingJson}')" class="px-3 py-1.5 rounded-lg bg-blue-500/10 text-blue-500 hover:bg-blue-500/20 text-[10px] font-bold transition-all">عرض التفاصيل</button>
-                            ${b.status === 'Pending' ? `<button onclick="updateBookingStatus(${b.id}, 'Ongoing')" class="px-3 py-1.5 rounded-lg bg-emerald-500/10 text-emerald-500 hover:bg-emerald-500/20 text-[10px] font-bold transition-all">تأكيد الحجز</button>` : ''}
+                            ${b.status === 'Pending' ? `<button onclick="updateBookingStatus(${b.id}, 'Ongoing')" class="px-3 py-1.5 rounded-lg bg-emerald-500/10 text-emerald-500 hover:bg-emerald-500/20 text-[10px] font-bold transition-all">تأكيد</button>` : ''}
+                            <button onclick="editBooking('${bookingJson}')" class="px-3 py-1.5 rounded-lg bg-primary/10 text-primary hover:bg-primary/20 text-[10px] font-bold transition-all">تعديل</button>
                             ${b.status !== 'Cancelled' && b.status !== 'Completed' ? `<button onclick="updateBookingStatus(${b.id}, 'Cancelled')" class="px-3 py-1.5 rounded-lg bg-red-500/10 text-red-500 hover:bg-red-500/20 text-[10px] font-bold transition-all">إلغاء</button>` : ''}
                         </div>
                     </td>
                 </tr>`;
             });
-        } catch(e) { console.error(e); }
+            
+            // Update counts if on bookings tab
+            const countEl = document.getElementById('booking-count');
+            if (countEl && currentTab === 'bookings') {
+                const currentBookings = data.filter(b => b.status !== 'Completed' && b.status !== 'Cancelled');
+                countEl.innerText = currentBookings.length;
+            }
     }
+
+    window.filterBookings = function() {
+        const status = document.getElementById('booking-status-filter').value;
+        const dateInput = document.getElementById('booking-date-filter');
+        const date = dateInput ? dateInput.value : '';
+        
+        let filtered = lastBookingsData;
+        
+        if (status !== 'all') {
+            filtered = filtered.filter(b => b.status === status);
+        }
+        
+        if (date) {
+            filtered = filtered.filter(b => b.start_date.startsWith(date));
+        }
+        
+        renderBookings(filtered);
+    };
 
     window.updateBookingStatus = async (id, status) => {
         const msg = status === 'Cancelled' ? 'هل أنت متأكد من إلغاء هذا الحجز؟' : 'تأكيد الحجز؟';
@@ -270,6 +474,52 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('booking-modal').classList.add('hidden');
     };
 
+    let currentEditBookingId = null;
+    window.editBooking = (json) => {
+        const b = JSON.parse(decodeURIComponent(json));
+        currentEditBookingId = b.id;
+        
+        const form = document.getElementById('edit-booking-form');
+        form.customer_name.value = b.customer_name;
+        form.customer_phone.value = b.customer_phone;
+        form.status.value = b.status;
+        form.total_amount.value = b.total_amount;
+        
+        document.getElementById('edit-booking-modal').classList.remove('hidden');
+    };
+
+    window.closeEditBookingModal = () => {
+        document.getElementById('edit-booking-modal').classList.add('hidden');
+        currentEditBookingId = null;
+    };
+
+    const editBookingForm = document.getElementById('edit-booking-form');
+    if (editBookingForm) {
+        editBookingForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(editBookingForm);
+            const data = Object.fromEntries(formData.entries());
+            
+            try {
+                const res = await fetch(`/api/bookings/${currentEditBookingId}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                
+                if (res.ok) {
+                    closeEditBookingModal();
+                    loadBookings();
+                    loadStats();
+                } else {
+                    alert('خطأ في تحديث الحجز');
+                }
+            } catch (err) {
+                console.error(err);
+            }
+        });
+    }
+
     // =====================================
     // ADMINS
     // =====================================
@@ -295,7 +545,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     </td>
                     <td class="py-5 px-4 text-left pl-6">
                         <button onclick="deleteAdmin(${admin.id})" class="w-8 h-8 rounded-lg bg-red-500/10 text-red-500 hover:bg-red-500/20 flex items-center justify-center transition-colors">
-                            <span class="material-symbols-outlined text-sm">delete</span>
+                            <i class="fa-solid fa-trash-can text-sm"></i>
                         </button>
                     </td>
                 </tr>`;
@@ -330,79 +580,13 @@ document.addEventListener('DOMContentLoaded', () => {
         loadAdmins();
     };
 
-    // =====================================
-    // PROMOS
-    // =====================================
-    const promosTbody = document.getElementById('promos-tbody');
-    const promoForm = document.getElementById('promo-form');
-
-    async function loadPromos() {
-        if(!promosTbody) return;
-        try {
-            const res = await fetch('/api/promo-codes');
-            const data = await res.json();
-            promosTbody.innerHTML = '';
-            
-            if(data.length === 0) {
-                promosTbody.innerHTML = '<tr><td colspan="5" class="py-12 text-center text-slate-500 text-sm">لا توجد أكواد خصم</td></tr>';
-                return;
-            }
-
-            data.forEach(p => {
-                promosTbody.innerHTML += `
-                <tr class="hover:bg-white/5 transition-colors group text-sm">
-                    <td class="py-4 px-4 text-right pr-6">
-                        <span class="bg-primary/10 text-primary px-3 py-1 rounded-lg font-bold font-sans tracking-widest">${p.code}</span>
-                    </td>
-                    <td class="py-4 px-4 font-bold">
-                        ${p.discount_value}${p.discount_type === 'Percentage' ? '%' : ' ج.م'}
-                    </td>
-                    <td class="py-4 px-4 font-sans text-xs">
-                        <span class="text-white">${p.used_count}</span> / ${p.usage_limit}
-                    </td>
-                    <td class="py-4 px-4 font-sans text-xs text-slate-400">
-                        ${p.expiry_date ? new Date(p.expiry_date).toLocaleDateString() : 'بدون انتهاء'}
-                    </td>
-                    <td class="py-4 px-4 text-left pl-6">
-                        <button onclick="deletePromo(${p.id})" class="w-8 h-8 rounded-lg bg-red-500/10 text-red-500 hover:bg-red-500/20 flex items-center justify-center transition-colors">
-                            <span class="material-symbols-outlined text-sm">delete</span>
-                        </button>
-                    </td>
-                </tr>`;
-            });
-        } catch(e) { console.error(e); }
-    }
-
-    if(promoForm) {
-        promoForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const formData = new FormData(promoForm);
-            const data = Object.fromEntries(formData.entries());
-            
-            const res = await fetch('/api/promo-codes', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify(data)
-            });
-            
-            if(res.ok) {
-                promoForm.reset();
-                loadPromos();
-                alert('تم إضافة كود الخصم بنجاح');
-            }
-        });
-    }
-
-    window.deletePromo = async (id) => {
-        if(!confirm('حذف هذا الكود؟')) return;
-        await fetch(`/api/promo-codes/${id}`, { method: 'DELETE' });
-        loadPromos();
-    };
-
-    // Update loadData or switchTab to handle new sections
-    // Note: The previous code used switchTab in HTML but loadData was called at the end.
-    // I will define switchTab globally to ensure it works with the HTML calls.
     window.switchTab = (tabId, title, subtitle) => {
+        // Access restricted?
+        if (!isAdmin && (tabId === 'fleet' || tabId === 'admins' || tabId === 'history')) {
+            alert('عذراً، لا تمتلك صلاحية الوصول لهذه الصفحة.');
+            return;
+        }
+
         // Hide all views
         document.querySelectorAll('main > div > div[id$="-view"]').forEach(el => {
             el.classList.add('hidden');
@@ -413,7 +597,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const targetView = document.getElementById(tabId + '-view');
         if (targetView) {
             targetView.classList.remove('hidden');
-            if (tabId === 'admins' || tabId === 'promos') {
+            if (tabId === 'admins') {
                 targetView.classList.add('md:grid');
             }
         }
@@ -437,15 +621,13 @@ document.addEventListener('DOMContentLoaded', () => {
         if (pageSubtitle) pageSubtitle.innerText = subtitle;
 
         // Load Data per section
-        if (tabId === 'overview') loadStats();
-        if (tabId === 'fleet') loadCars();
-        if (tabId === 'blogs') loadBlogs();
-        if (tabId === 'bookings') loadBookings();
-        if (tabId === 'admins') loadAdmins();
-        if (tabId === 'reports') loadStats();
-        if (tabId === 'promos') loadPromos();
+        loadData(tabId);
     };
 
-    // Initial Load
-    switchTab('overview', 'لوحة التحكم', 'مرحباً بك في نظام إدارة أوتو لاين');
+    // Logout
+    window.logout = function() {
+        localStorage.removeItem('admin');
+        window.location.href = 'admin_login.html';
+    };
+
 });

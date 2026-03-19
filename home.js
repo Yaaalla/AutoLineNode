@@ -32,12 +32,16 @@ document.addEventListener('DOMContentLoaded', async () => {
                         </div>
                         <div class="flex gap-6 mb-8 justify-end border-t border-white/5 pt-6">
                             <div class="flex items-center gap-2 text-[10px] text-slate-400 uppercase font-bold tracking-widest">
-                                <span>${car.seats || 4} مقاعد</span>
-                                <span class="material-symbols-outlined text-sm text-primary">airline_seat_recline_extra</span>
+                                <span>${car.car_condition || 100}% حالة</span>
+                                                                <i class="fa-solid fa-circle-check text-sm text-primary"></i>
                             </div>
                             <div class="flex items-center gap-2 text-[10px] text-slate-400 uppercase font-bold tracking-widest">
                                 <span>${car.transmission === 'Manual' ? 'مانيوال' : 'اتوماتيك'}</span>
-                                <span class="material-symbols-outlined text-sm text-primary">settings</span>
+                                                                <i class="fa-solid fa-gears text-sm text-primary"></i>
+                            </div>
+                            <div class="flex items-center gap-2 text-[10px] text-slate-400 uppercase font-bold tracking-widest">
+                                <span>${car.seats || 4} مقاعد</span>
+                                                                <i class="fa-solid fa-chair text-sm text-primary"></i>
                             </div>
                         </div>
                         <a href="car_details.html?id=${car.id}" class="mt-auto block w-full bg-white/5 border border-white/10 text-white group-hover:bg-primary group-hover:text-background-dark group-hover:border-primary py-4 rounded-xl text-sm font-black transition-all text-center shadow-lg">
@@ -83,8 +87,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                         <h3 class="text-white font-black text-2xl mb-6 leading-tight group-hover:text-primary transition-colors cursor-pointer">${blog.title}</h3>
                         <p class="text-slate-400 text-sm font-light leading-relaxed mb-8 line-clamp-3">${blog.content}</p>
                         <a href="#" class="mt-auto inline-flex items-center gap-3 text-primary text-sm font-black hover:text-white transition-all w-fit mr-auto group/link">
-                            <span>اقرأ المزيد</span>
-                            <span class="material-symbols-outlined text-sm group-hover/link:-translate-x-2 transition-transform">arrow_forward</span>
+                                                        <span>اقرأ المزيد</span>
+                            <i class="fa-solid fa-arrow-left text-sm group-hover/link:-translate-x-2 transition-transform"></i>
                         </a>
                     </div>
                 </div>`;
@@ -92,3 +96,27 @@ document.addEventListener('DOMContentLoaded', async () => {
         } catch(e) { console.error('Failed to load blogs', e); }
     }
 });
+
+function performSearch() {
+    const location = document.getElementById('search-location').value;
+    const pickup = document.getElementById('search-pickup').value;
+    const dropoff = document.getElementById('search-dropoff').value;
+    
+    if (!pickup || !dropoff) {
+        alert("يرجى اختيار تاريخ الاستلام والإرجاع");
+        return;
+    }
+
+    if (new Date(pickup) > new Date(dropoff)) {
+        alert("تاريخ الاستلام لا يمكن أن يكون بعد تاريخ الإرجاع");
+        return;
+    }
+
+    const params = new URLSearchParams({
+        location,
+        pickup,
+        dropoff
+    });
+    
+    window.location.href = `vehicles_gallery.html?${params.toString()}`;
+}

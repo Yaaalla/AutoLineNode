@@ -5,7 +5,8 @@
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <script id="tailwind-config">
         tailwind.config = {
             darkMode: "class",
@@ -58,7 +59,7 @@
 <!-- Top Navigation -->
 <header class="fixed top-0 w-full z-50 border-b border-white/10 bg-background-dark/80 backdrop-blur-md px-6 lg:px-20 py-4 flex items-center justify-between">
 <div class="flex items-center gap-2">
-<span class="text-primary material-symbols-outlined text-3xl">directions_car</span>
+<i class="fa-solid fa-car text-primary text-3xl"></i>
 <h1 class="font-bold text-2xl tracking-tight text-slate-100">اوتو لاين</h1>
 </div>
 <nav class="hidden md:flex items-center gap-10">
@@ -132,7 +133,7 @@
 
 <button type="submit" class="bg-primary text-background-dark font-black py-5 px-12 rounded-2xl hover:bg-white transition-all shadow-[0_0_30px_rgba(201,169,110,0.3)] flex items-center justify-center gap-3 h-[60px] min-w-[150px]">
 <span>بحث</span>
-<span class="material-symbols-outlined font-black">search</span>
+<i class="fa-solid fa-magnifying-glass font-black"></i>
 </button>
 </form>
 </div>
@@ -150,22 +151,33 @@
     <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-20">
         <div class="col-span-1 lg:col-span-1">
             <div class="flex items-center gap-2 mb-8 justify-end">
-                <span class="text-primary material-symbols-outlined text-3xl">directions_car</span>
+                <i class="fa-solid fa-car text-primary text-3xl"></i>
                 <h1 class="text-3xl font-bold text-white">اوتو لاين</h1>
             </div>
             <p class="text-slate-500 text-sm leading-relaxed mb-8">
                 أوتو لاين، 2 مسجد الرحمن الرحيم، هاكستيب، النزهة، محافظة القاهرة 4473212
             </p>
             <div class="flex gap-4 justify-end">
-                <a class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-slate-400 hover:bg-primary hover:text-background-dark transition-all" href="#">
-                    <span class="material-symbols-outlined text-xl">public</span>
+            <div class="flex gap-4 justify-end">
+                <a class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-slate-400 hover:bg-primary hover:text-background-dark transition-all" 
+                   href="https://facebook.com/autoline" 
+                   target="_blank" 
+                   title="فيسبوك">
+                            <i class="fa-brands fa-facebook-f text-xl"></i>
                 </a>
-                <a class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-slate-400 hover:bg-primary hover:text-background-dark transition-all" href="#">
-                    <span class="material-symbols-outlined text-xl">camera_alt</span>
+                <a class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-slate-400 hover:bg-primary hover:text-background-dark transition-all" 
+                   href="https://instagram.com/autoline" 
+                   target="_blank" 
+                   title="إنستجرام">
+                            <i class="fa-brands fa-instagram text-xl"></i>
                 </a>
-                <a class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-slate-400 hover:bg-primary hover:text-background-dark transition-all" href="#">
-                    <span class="material-symbols-outlined text-xl">chat</span>
+                <a class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-slate-400 hover:bg-primary hover:text-background-dark transition-all" 
+                   href="https://wa.me/201003412321" 
+                   target="_blank" 
+                   title="واتساب">
+                            <i class="fa-brands fa-whatsapp text-xl"></i>
                 </a>
+            </div>
             </div>
         </div>
         <div>
@@ -180,13 +192,13 @@
         <div>
             <h5 class="text-white font-bold uppercase tracking-widest text-xs mb-8">تواصل معنا</h5>
             <ul class="space-y-4 text-slate-500 text-sm">
-                <li class="flex items-center gap-3 justify-end">
+                <li class="flex items-center gap-3 justify-end font-sans">
                     <span>+20 100 341 2321</span>
-                    <span class="material-symbols-outlined text-primary text-lg">call</span>
+                    <i class="fa-solid fa-phone text-primary text-lg"></i>
                 </li>
-                <li class="flex items-center gap-3 justify-end">
+                <li class="flex items-center gap-3 justify-end font-sans">
                     <span>+20 115 414 4465</span>
-                    <span class="material-symbols-outlined text-primary text-lg">call</span>
+                    <i class="fa-solid fa-phone text-primary text-lg"></i>
                 </li>
             </ul>
         </div>
@@ -194,7 +206,7 @@
     <div class="max-w-7xl mx-auto border-t border-white/5 pt-10 flex flex-col md:flex-row justify-between items-center gap-6">
         <p class="text-slate-600 text-[10px] uppercase tracking-[0.3em]">© 2026 اوتو لاين لتاجير السيارات. جميع الحقوق محفوظة.</p>
         <div class="flex gap-8">
-            <a class="text-slate-600 text-[10px] uppercase tracking-[0.2em] hover:text-white" href="#">Designed by Yaaalla</a>
+            <a class="text-slate-600 text-[10px] uppercase tracking-[0.2em] hover:text-white" href="https://github.com/Yaaalla" target="_blank">Designed by Yaaalla</a>
         </div>
     </div>
 </footer>

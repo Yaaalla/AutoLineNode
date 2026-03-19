@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (blogs.length === 0) {
             blogGrid.innerHTML = `
                 <div class="col-span-full text-center py-20 flex flex-col items-center gap-4">
-                    <span class="material-symbols-outlined text-slate-600 text-6xl">article_off</span>
+                                        <i class="fa-solid fa-file-circle-xmark text-slate-600 text-6xl"></i>
                     <p class="text-slate-500 text-xl font-bold">لا توجد مقالات منشورة بعد.</p>
                 </div>`;
             return;
@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     
                     <a href="#" class="mt-auto inline-flex items-center gap-4 text-primary text-sm font-black hover:text-white transition-all w-fit mr-auto group/link">
                         <span>اقرأ المزيد</span>
-                        <span class="material-symbols-outlined text-sm group-hover/link:-translate-x-3 transition-transform">arrow_forward</span>
+                                                <i class="fa-solid fa-arrow-left text-sm group-hover/link:-translate-x-3 transition-transform"></i>
                     </a>
                 </div>
             </div>`;

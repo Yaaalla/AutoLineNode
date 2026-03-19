@@ -8,6 +8,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     
     if (!carsGrid) return;
     
+    const urlParams = new URLSearchParams(window.location.search);
+    const searchPickup = urlParams.get('pickup');
+    const searchDropoff = urlParams.get('dropoff');
+    const searchLocation = urlParams.get('location');
+
     let allCars = [];
 
     async function loadCars() {
@@ -39,7 +44,15 @@ document.addEventListener('DOMContentLoaded', async () => {
         carsGrid.innerHTML = '';
         
         if (cars.length === 0) {
-            carsGrid.innerHTML = '<p class="text-center w-full text-slate-400 py-10 col-span-full">لا توجد سيارات تطابق بحثك.</p>';
+            carsGrid.innerHTML = `
+                <div class="col-span-full py-32 text-center animate-fade-in">
+                    <div class="inline-flex items-center justify-center w-24 h-24 rounded-[2.5rem] bg-white/5 border border-white/10 mb-8">
+                        <i class="fa-solid fa-car-slash text-5xl text-slate-600"></i>
+                    </div>
+                    <h3 class="text-2xl font-black text-white mb-4">لا توجد سيارات حالياً</h3>
+                    <p class="text-slate-500 max-w-sm mx-auto font-bold">عذراً، لا توجد سيارات تطابق معايير البحث الخاصة بك في الوقت الحالي. يرجى تجربة خيارات أخرى.</p>
+                </div>
+            `;
             return;
         }
 
@@ -74,23 +87,23 @@ document.addEventListener('DOMContentLoaded', async () => {
                     <div class="grid grid-cols-2 gap-y-6 gap-x-8 mb-10 border-y border-white/5 py-8">
                         <div class="flex items-center gap-3 justify-end text-slate-400 group/icon">
                             <span class="text-xs font-bold group-hover:text-white transition-colors">${car.transmission === 'Manual' ? 'مانيوال' : 'أوتوماتيك'}</span>
-                            <span class="material-symbols-outlined text-xl text-primary/50 group-hover:text-primary transition-colors">settings</span>
+                                                            <i class="fa-solid fa-gears text-xl text-primary/50 group-hover:text-primary transition-colors"></i>
                         </div>
                         <div class="flex items-center gap-3 justify-end text-slate-400 group/icon">
                             <span class="text-xs font-bold group-hover:text-white transition-colors font-sans">${car.seats || '5'} مقاعد</span>
-                            <span class="material-symbols-outlined text-xl text-primary/50 group-hover:text-primary transition-colors">event_seat</span>
+                                                            <i class="fa-solid fa-chair text-xl text-primary/50 group-hover:text-primary transition-colors"></i>
                         </div>
                         <div class="flex items-center gap-3 justify-end text-slate-400 group/icon">
                             <span class="text-xs font-bold group-hover:text-white transition-colors">${car.fuel || 'بنزين'}</span>
-                            <span class="material-symbols-outlined text-xl text-primary/50 group-hover:text-primary transition-colors">local_gas_station</span>
+                                                            <i class="fa-solid fa-gas-pump text-xl text-primary/50 group-hover:text-primary transition-colors"></i>
                         </div>
                         <div class="flex items-center gap-3 justify-end text-slate-400 group/icon">
-                            <span class="text-xs font-bold group-hover:text-white transition-colors font-sans">${car.power || '250'} HP</span>
-                            <span class="material-symbols-outlined text-xl text-primary/50 group-hover:text-primary transition-colors">speed</span>
+                            <span class="text-xs font-bold group-hover:text-white transition-colors font-sans">${car.car_condition || '100'}% حالة</span>
+                                                            <i class="fa-solid fa-circle-check text-xl text-primary/50 group-hover:text-primary transition-colors"></i>
                         </div>
                     </div>
 
-                    <a href="car_details.html?id=${car.id}" class="mt-auto block w-full bg-white/5 border border-white/10 text-white group-hover:bg-primary group-hover:text-background-dark group-hover:border-primary py-5 rounded-2xl text-sm font-black transition-all text-center shadow-lg">
+                    <a href="car_details.html?id=${car.id}${searchPickup ? `&pickup=${searchPickup}&dropoff=${searchDropoff}&location=${searchLocation}` : ''}" class="mt-auto block w-full bg-white/5 border border-white/10 text-white group-hover:bg-primary group-hover:text-background-dark group-hover:border-primary py-5 rounded-2xl text-sm font-black transition-all text-center shadow-lg">
                         عرض التفاصيل
                     </a>
                 </div>

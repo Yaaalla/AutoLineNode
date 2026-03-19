@@ -5,7 +5,9 @@
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
 <script id="tailwind-config">
         tailwind.config = {
             darkMode: "class",
@@ -74,7 +76,7 @@
 <!-- Top Navigation -->
 <header class="fixed top-0 w-full z-50 border-b border-white/10 bg-background-dark/80 backdrop-blur-md px-6 lg:px-20 py-4 flex items-center justify-between">
 <div class="flex items-center gap-2">
-<span class="text-primary material-symbols-outlined text-3xl">directions_car</span>
+<i class="fa-solid fa-car text-primary text-3xl"></i>
 <h1 class="font-bold text-2xl tracking-tight text-slate-100">اوتو لاين</h1>
 </div>
 <nav class="hidden md:flex items-center gap-10">
@@ -89,22 +91,19 @@
         </a>
 </header>
 
-<!-- Hero Section -->
-<section class="relative h-[40vh] w-full flex flex-col items-center justify-center overflow-hidden">
-<div class="absolute inset-0 z-0">
-<div class="absolute inset-0 hero-gradient z-10"></div>
-<img alt="Hero Contact" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBC2X5W8_p8Y1Fz2v1D1U5Vv9P7-v9d9P7-v9d9P7-v9d9P7-v9d9P7-v9d9P7-v9d9P7-v9d9P7-v9d9P7-v9d9P7-v9d9P7-v9d9P7-v9d9P7-v9d9P7-v9d9P7-v9d9P7-v9d9P7-v9d9"/>
-</div>
-<div class="relative z-20 text-center px-4 max-w-5xl mt-20 reveal active">
-<div class="glass inline-block px-8 py-3 rounded-full mb-8 delay-1 mr-0 ml-auto flex items-center gap-2 w-fit">
-<span class="text-primary material-symbols-outlined">support_agent</span>
-<span class="text-primary text-sm font-black tracking-[0.2em] uppercase">Contact Auto Line</span>
-</div>
-<h2 class="text-6xl md:text-8xl font-black text-white mb-8 leading-tight tracking-tight delay-2">تواصل معنا</h2>
-<p class="text-slate-300 text-xl md:text-2xl max-w-3xl mx-auto leading-relaxed font-light delay-3">
-    نحن هنا لضمان رحلة سلسة وفاخرة. تواصل مع خبرائنا في أي وقت.
-</p>
-</div>
+<!-- Premium Contact Hero Section -->
+<section class="relative pt-48 pb-32 px-6 lg:px-20 bg-background-dark overflow-hidden min-h-[50vh] flex flex-col justify-center">
+    <!-- Premium Background Image -->
+    <div class="absolute inset-0 z-0">
+        <div class="absolute inset-0 hero-gradient z-10"></div>
+        <img alt="Contact Hero Car" class="w-full h-full object-cover opacity-50" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC7HcLpgfaE59uEG7K2C1TXDq16kT-TJrRGCaGVnoWbxxdpwjH8O2bE7ucJA71NQMcnulweRX_IsDkA7DB9qba0BVlxI6LOX54VzaeD8oR4meyR6CCoyWEtwiAoowGS5DjC_sSUbbeVb3LenV17qLY9EEyzq9-EUMO9gaU3gU4ejtjm9f5lRZSQkfqX2L8rQNeQRpL3wvzPCgFVb8vfEV618ANjj3ONf02d7c2RiaqpvT52rZbC-z_TH14KEOs4DJ82EU_f0W-26O6j"/>
+    </div>
+    
+    <div class="max-w-7xl mx-auto text-center reveal active">
+        <h4 class="text-primary font-bold uppercase tracking-[0.4em] text-xs mb-6">نحن هنا لخدمتك</h4>
+        <h1 class="text-4xl md:text-7xl text-white font-black leading-tight mb-8">تواصل <span class="text-primary italic">معنا</span></h1>
+        <p class="text-slate-400 text-lg max-w-2xl mx-auto font-light">نحن هنا لضمان رحلة سلسة وفاخرة. تواصل مع خبرائنا في أي وقت.</p>
+    </div>
 </section>
 
 <!-- Contact Form Section -->
@@ -119,21 +118,21 @@
 <label class="block text-[10px] font-black text-primary mb-3 uppercase tracking-[0.2em]">الاسم بالكامل *</label>
 <div class="relative">
 <input class="w-full contact-input rounded-2xl px-14 py-5 text-white focus:ring-0 placeholder:text-slate-600 font-bold" placeholder="أدخل اسمك بالكامل" type="text" required/>
-<span class="material-symbols-outlined absolute right-5 top-1/2 -translate-y-1/2 text-slate-500">person</span>
+<i class="fa-solid fa-user absolute right-5 top-1/2 -translate-y-1/2 text-slate-500"></i>
 </div>
 </div>
 <div>
 <label class="block text-[10px] font-black text-primary mb-3 uppercase tracking-[0.2em]">البريد الإلكتروني *</label>
 <div class="relative">
 <input class="w-full contact-input rounded-2xl px-14 py-5 text-white focus:ring-0 placeholder:text-slate-600 font-bold" placeholder="example@domain.com" type="email" required/>
-<span class="material-symbols-outlined absolute right-5 top-1/2 -translate-y-1/2 text-slate-500">mail</span>
+<i class="fa-solid fa-envelope text-primary text-3xl"></i>
 </div>
 </div>
 <div>
 <label class="block text-[10px] font-black text-primary mb-3 uppercase tracking-[0.2em]">الموضوع</label>
 <div class="relative">
 <input class="w-full contact-input rounded-2xl px-14 py-5 text-white focus:ring-0 placeholder:text-slate-600 font-bold" placeholder="كيف يمكننا مساعدتك؟" type="text"/>
-<span class="material-symbols-outlined absolute right-5 top-1/2 -translate-y-1/2 text-slate-500">subject</span>
+<i class="fa-solid fa-pen-to-square absolute right-5 top-1/2 -translate-y-1/2 text-slate-500"></i>
 </div>
 </div>
 <div>
@@ -142,7 +141,7 @@
 </div>
 <button class="w-full bg-primary text-background-dark py-5 rounded-2xl font-black flex items-center justify-center gap-4 hover:bg-white transition-all shadow-[0_10px_30px_rgba(201,169,110,0.3)] group" type="submit">
 <span>إرسال الرسالة الآن</span>
-<span class="material-symbols-outlined text-xl group-hover:-translate-x-2 transition-transform">send</span>
+<i class="fa-solid fa-paper-plane text-xl group-hover:-translate-x-2 transition-transform"></i>
 </button>
 </form>
 </div>
@@ -152,7 +151,7 @@
 <div>
 <div class="flex items-center gap-3 mb-4 justify-end">
 <span class="text-primary font-bold uppercase tracking-widest text-xs">اتصل بنا</span>
-<span class="text-primary material-symbols-outlined">support_agent</span>
+<i class="text-primary fa-solid fa-headset"></i>
 </div>
 <h2 class="text-4xl text-white font-bold mb-6 underline decoration-primary/30 underline-offset-8">نحن متواجدون دائمًا لخدمتك</h2>
 </div>
@@ -160,7 +159,7 @@
 <div class="space-y-8">
 <div class="flex items-start gap-6 justify-end">
 <div class="order-2 bg-primary/20 p-4 rounded-2xl">
-<span class="text-primary material-symbols-outlined text-3xl">location_on</span>
+<i class="text-primary fa-solid fa-location-dot text-3xl"></i>
 </div>
 <div class="order-1">
 <h4 class="text-xl text-white font-bold mb-2">العنوان:</h4>
@@ -170,7 +169,7 @@
 
 <div class="flex items-start gap-6 justify-end">
 <div class="order-2 bg-primary/20 p-4 rounded-2xl">
-<span class="text-primary material-symbols-outlined text-3xl">call</span>
+<i class="fa-solid fa-phone text-primary text-3xl"></i>
 </div>
 <div class="order-1">
 <h4 class="text-xl text-white font-bold mb-2">رقم الهاتف:</h4>
@@ -181,7 +180,7 @@
 
 <div class="flex items-start gap-6 justify-end">
 <div class="order-2 bg-primary/20 p-4 rounded-2xl">
-<span class="text-primary material-symbols-outlined text-3xl">mail</span>
+<i class="fa-solid fa-envelope text-primary text-3xl"></i>
 </div>
 <div class="order-1">
 <h4 class="text-xl text-white font-bold mb-2">البريد الإلكتروني:</h4>
@@ -213,22 +212,33 @@
     <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-20">
         <div class="col-span-1 lg:col-span-1">
             <div class="flex items-center gap-2 mb-8 justify-end">
-                <span class="text-primary material-symbols-outlined text-3xl">directions_car</span>
+                <i class="fa-solid fa-car text-primary text-3xl"></i>
                 <h1 class="text-3xl font-bold text-white">اوتو لاين</h1>
             </div>
             <p class="text-slate-500 text-sm leading-relaxed mb-8">
                 أوتو لاين، 2 مسجد الرحمن الرحيم، هاكستيب، النزهة، محافظة القاهرة 4473212
             </p>
             <div class="flex gap-4 justify-end">
-                <a class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-slate-400 hover:bg-primary hover:text-background-dark transition-all" href="#">
-                    <span class="material-symbols-outlined text-xl">public</span>
+            <div class="flex gap-4 justify-end">
+                <a class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-slate-400 hover:bg-primary hover:text-background-dark transition-all" 
+                   href="https://facebook.com/autoline" 
+                   target="_blank" 
+                   title="فيسبوك">
+                            <i class="fa-brands fa-facebook-f text-xl"></i>
                 </a>
-                <a class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-slate-400 hover:bg-primary hover:text-background-dark transition-all" href="#">
-                    <span class="material-symbols-outlined text-xl">camera_alt</span>
+                <a class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-slate-400 hover:bg-primary hover:text-background-dark transition-all" 
+                   href="https://instagram.com/autoline" 
+                   target="_blank" 
+                   title="إنستجرام">
+                            <i class="fa-brands fa-instagram text-xl"></i>
                 </a>
-                <a class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-slate-400 hover:bg-primary hover:text-background-dark transition-all" href="#">
-                    <span class="material-symbols-outlined text-xl">chat</span>
+                <a class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-slate-400 hover:bg-primary hover:text-background-dark transition-all" 
+                   href="https://wa.me/201003412321" 
+                   target="_blank" 
+                   title="واتساب">
+                            <i class="fa-brands fa-whatsapp text-xl"></i>
                 </a>
+            </div>
             </div>
         </div>
         <div>
@@ -237,19 +247,19 @@
                 <li><a class="hover:text-primary transition-colors" href="index.html">الرئيسية</a></li>
                 <li><a class="hover:text-primary transition-colors" href="about.html">من نحن</a></li>
                 <li><a class="hover:text-primary transition-colors" href="vehicles_gallery.html">سيارات للايجار</a></li>
-                <li><a class="hover:text-primary transition-colors" href="blog.html">المدونة</a></li>
+                <li><a class="hover:text-primary transition-colors active text-primary" href="blog.html">المدونة</a></li>
             </ul>
         </div>
         <div>
             <h5 class="text-white font-bold uppercase tracking-widest text-xs mb-8">تواصل معنا</h5>
             <ul class="space-y-4 text-slate-500 text-sm">
-                <li class="flex items-center gap-3 justify-end">
+                <li class="flex items-center gap-3 justify-end font-sans">
                     <span>+20 100 341 2321</span>
-                    <span class="material-symbols-outlined text-primary text-lg">call</span>
+                    <i class="fa-solid fa-phone text-primary text-lg"></i>
                 </li>
-                <li class="flex items-center gap-3 justify-end">
+                <li class="flex items-center gap-3 justify-end font-sans">
                     <span>+20 115 414 4465</span>
-                    <span class="material-symbols-outlined text-primary text-lg">call</span>
+                    <i class="fa-solid fa-phone text-primary text-lg"></i>
                 </li>
             </ul>
         </div>
@@ -257,7 +267,7 @@
     <div class="max-w-7xl mx-auto border-t border-white/5 pt-10 flex flex-col md:flex-row justify-between items-center gap-6">
         <p class="text-slate-600 text-[10px] uppercase tracking-[0.3em]">© 2026 اوتو لاين لتاجير السيارات. جميع الحقوق محفوظة.</p>
         <div class="flex gap-8">
-            <a class="text-slate-600 text-[10px] uppercase tracking-[0.2em] hover:text-white" href="#">Designed by Yaaalla</a>
+            <a class="text-slate-600 text-[10px] uppercase tracking-[0.2em] hover:text-white" href="https://github.com/Yaaalla" target="_blank">Designed by Yaaalla</a>
         </div>
     </div>
 </footer>

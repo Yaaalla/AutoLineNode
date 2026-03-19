@@ -1,13 +1,11 @@
 document.addEventListener('DOMContentLoaded', async () => {
     const urlParams = new URLSearchParams(window.location.search);
-    const carId = urlParams.get('car_id');
+    let carId = urlParams.get('car_id') || urlParams.get('id');
     
-    if (!carId) {
-        alert("يرجى اختيار سيارة أولاً.");
-        window.location.href = 'vehicles_gallery.html';
-        return;
-    }
+    const carSelectContainer = document.getElementById('car-select-container');
+    const carIdSelect = document.getElementById('car_id_select');
 
+    let allCarsList = [];
     let selectedCar = null;
     let pricePerDay = 0;
     let unavailableDates = [];
@@ -19,38 +17,87 @@ document.addEventListener('DOMContentLoaded', async () => {
     const promoInput = document.getElementById('promo_code_input');
     const applyPromoBtn = document.getElementById('apply-promo-btn');
     const promoMessage = document.getElementById('promo-message');
-    
-    // Setup sensible default dates
+    // Setup sensible default dates from URL if available
+    const urlStart = urlParams.get('start_date') || urlParams.get('pickup');
+    const urlEnd = urlParams.get('end_date') || urlParams.get('dropoff');
+    const urlLoc = urlParams.get('location');
+
     const today = new Date();
     const tomorrow = new Date(today);
     tomorrow.setDate(tomorrow.getDate() + 1);
     
-    startDateInput.value = today.toISOString().split('T')[0];
-    endDateInput.value = tomorrow.toISOString().split('T')[0];
+    startDateInput.value = urlStart || today.toISOString().split('T')[0];
+    endDateInput.value = urlEnd || tomorrow.toISOString().split('T')[0];
     startDateInput.min = today.toISOString().split('T')[0];
 
-    // Fetch Car details and availability
+    // Restore from sessionStorage
+    const savedName = sessionStorage.getItem('bk_name');
+    const savedEmail = sessionStorage.getItem('bk_email');
+    const savedPhone = sessionStorage.getItem('bk_phone');
+    if (savedName) document.getElementById('customer_name').value = savedName;
+    if (savedEmail) document.getElementById('customer_email').value = savedEmail;
+    if (savedPhone) document.getElementById('customer_phone').value = savedPhone;
+
+    // Listeners for persistence
+    ['customer_name', 'customer_email', 'customer_phone'].forEach(id => {
+        document.getElementById(id).addEventListener('input', (e) => {
+            sessionStorage.setItem('bk_' + id.split('_')[1], e.target.value);
+        });
+    });
+
+    // Fetch ALL Cars and availability
     try {
-        const [carRes, availRes] = await Promise.all([
-            fetch('/api/cars'),
-            fetch(`/api/cars/${carId}/availability`)
+        const [carRes] = await Promise.all([
+            fetch('/api/cars')
         ]);
         
-        const cars = await carRes.json();
-        unavailableDates = await availRes.json();
-        selectedCar = cars.find(c => c.id == carId);
+        allCarsList = await carRes.json();
         
-        if (!selectedCar) throw new Error('Car not found');
-        
-        const hasDiscount = selectedCar.discount_price && selectedCar.discount_price < selectedCar.price;
-        pricePerDay = hasDiscount ? parseFloat(selectedCar.discount_price) : parseFloat(selectedCar.price);
-        
-        renderSummary();
+        // Populate car select dropdown
+        allCarsList.forEach(car => {
+            const opt = document.createElement('option');
+            opt.value = car.id;
+            opt.textContent = `${car.brand} ${car.model}`;
+            if (car.id == carId) opt.selected = true;
+            carIdSelect.appendChild(opt);
+        });
+
+        if (!carId) {
+            carSelectContainer.classList.remove('hidden');
+            carId = carIdSelect.value; // Pick first available
+        } else {
+            // Even if we have carId, maybe show it to allow changing?
+            // User requested "select car", let's show it but pre-selected.
+            carSelectContainer.classList.remove('hidden');
+        }
+
+        await updateSelectedCar(carId);
+
     } catch(err) {
         console.error(err);
-        document.getElementById('summary-section').innerHTML = '<p class="text-red-500 text-center w-full my-auto font-bold">حدث خطأ أثناء تحميل تفاصيل السيارة. يرجى المحاولة مرة أخرى.</p>';
+        document.getElementById('summary-section').innerHTML = '<p class="text-red-500 text-center w-full my-auto font-bold">حدث خطأ أثناء تحميل البيانات. يرجى المحاولة مرة أخرى.</p>';
         return;
     }
+
+    async function updateSelectedCar(id) {
+        carId = id;
+        selectedCar = allCarsList.find(c => c.id == id);
+        if (!selectedCar) return;
+
+        const hasDiscount = selectedCar.discount_price && selectedCar.discount_price < selectedCar.price;
+        pricePerDay = hasDiscount ? parseFloat(selectedCar.discount_price) : parseFloat(selectedCar.price);
+
+        // Fetch availability for specific car
+        const availRes = await fetch(`/api/cars/${id}/availability`);
+        unavailableDates = await availRes.json();
+        
+        validateDates();
+        renderSummary();
+    }
+
+    carIdSelect.addEventListener('change', (e) => {
+        updateSelectedCar(e.target.value);
+    });
 
     function isOverlapping(start, end) {
         const s = new Date(start);
@@ -98,40 +145,46 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
-    applyPromoBtn.addEventListener('click', async () => {
-        const code = promoInput.value.trim().toUpperCase();
-        if (!code) return;
-        
-        applyPromoBtn.disabled = true;
-        applyPromoBtn.innerHTML = '<span class="material-symbols-outlined animate-spin text-sm">refresh</span>';
-        
-        try {
-            const res = await fetch('/api/promo-codes/validate', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ code })
-            });
+    if (applyPromoBtn) {
+        applyPromoBtn.addEventListener('click', async () => {
+            const code = promoInput.value.trim().toUpperCase();
+            if (!code) return;
             
-            const data = await res.json();
+            applyPromoBtn.disabled = true;
+            applyPromoBtn.innerHTML = '<i class="fa-solid fa-arrows-rotate fa-spin text-sm"></i>';
             
-            if (res.ok) {
-                appliedPromo = data;
-                promoMessage.textContent = `تم تطبيق خصم ${data.discount_value}${data.discount_type === 'Percentage' ? '%' : ' ج.م'}`;
-                promoMessage.className = 'text-[10px] font-bold mt-2 mr-2 text-emerald-500 block';
-                renderSummary();
-            } else {
-                appliedPromo = null;
-                promoMessage.textContent = data.error;
-                promoMessage.className = 'text-[10px] font-bold mt-2 mr-2 text-red-500 block';
-                renderSummary();
+            try {
+                const res = await fetch('/api/promo-codes/validate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ code })
+                });
+                
+                const data = await res.json();
+                
+                if (res.ok) {
+                    appliedPromo = data;
+                    if (promoMessage) {
+                        promoMessage.textContent = `تم تطبيق خصم ${data.discount_value}${data.discount_type === 'Percentage' ? '%' : ' ج.م'}`;
+                        promoMessage.className = 'text-[10px] font-bold mt-2 mr-2 text-emerald-500 block';
+                    }
+                    renderSummary();
+                } else {
+                    appliedPromo = null;
+                    if (promoMessage) {
+                        promoMessage.textContent = data.error;
+                        promoMessage.className = 'text-[10px] font-bold mt-2 mr-2 text-red-500 block';
+                    }
+                    renderSummary();
+                }
+            } catch (e) {
+                console.error(e);
+            } finally {
+                applyPromoBtn.disabled = false;
+                applyPromoBtn.textContent = 'تطبيق';
             }
-        } catch (e) {
-            console.error(e);
-        } finally {
-            applyPromoBtn.disabled = false;
-            applyPromoBtn.textContent = 'تطبيق';
-        }
-    });
+        });
+    }
 
     function calculateTotal() {
         if(!startDateInput.value || !endDateInput.value) return { days: 0, subtotal: 0, discount: 0, total: 0 };
@@ -222,12 +275,16 @@ document.addEventListener('DOMContentLoaded', async () => {
         formData.append('customer_name', document.getElementById('customer_name').value);
         formData.append('customer_email', document.getElementById('customer_email').value);
         formData.append('customer_phone', document.getElementById('customer_phone').value);
+        formData.append('location', urlParams.get('location') || 'فرع القاهرة');
+        formData.append('pickup_time', '10:00'); // Default time
+        formData.append('license_number', 'N/A'); // Default for now since we removed the field
+        
         if (appliedPromo) {
             formData.append('promo_code', appliedPromo.code);
         }
         
         const btn = document.getElementById('submit-booking-btn');
-        btn.innerHTML = '<span class="material-symbols-outlined animate-spin text-sm">refresh</span> جاري الحجز...';
+        btn.innerHTML = '<i class="fa-solid fa-arrows-rotate fa-spin text-sm"></i> جاري الحجز...';
         btn.disabled = true;
         
         try {
@@ -239,6 +296,9 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (response.ok) {
                 showModal(true, "تم تأكيد الحجز!", "سيارتك الفاخرة مؤمنة. سنقوم بالتواصل معك قريباً لتأكيد الموعد.");
                 bookingForm.reset();
+                sessionStorage.removeItem('bk_name');
+                sessionStorage.removeItem('bk_email');
+                sessionStorage.removeItem('bk_phone');
                 appliedPromo = null;
                 promoMessage.classList.add('hidden');
             } else {
@@ -262,10 +322,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         
         if (isSuccess) {
             iconDiv.className = "mx-auto w-24 h-24 rounded-[2rem] flex items-center justify-center mb-8 bg-emerald-500/10 text-emerald-500";
-            iconDiv.innerHTML = '<span class="material-symbols-outlined text-5xl">check_circle</span>';
+            iconDiv.innerHTML = '<i class="fa-solid fa-circle-check text-5xl"></i>';
         } else {
             iconDiv.className = "mx-auto w-24 h-24 rounded-[2rem] flex items-center justify-center mb-8 bg-red-500/10 text-red-500";
-            iconDiv.innerHTML = '<span class="material-symbols-outlined text-5xl">error</span>';
+            iconDiv.innerHTML = '<i class="fa-solid fa-triangle-exclamation text-5xl"></i>';
         }
         
         modal.classList.remove('hidden');

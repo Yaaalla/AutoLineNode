@@ -1,4 +1,6 @@
 const db = require('./db');
+const bcrypt = require('bcryptjs');
+
 const sql = `
 CREATE TABLE IF NOT EXISTS admins (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -8,13 +10,18 @@ CREATE TABLE IF NOT EXISTS admins (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 `;
-const sql2 = `INSERT IGNORE INTO admins (username, password, role) VALUES ('admin', 'admin123', 'مسؤول عام');`;
 
 (async () => {
     try {
         await db.query(sql);
-        await db.query(sql2);
-        console.log('Admins table setup complete!');
+        
+        // Hash the initial password
+        const hashedPassword = await bcrypt.hash('admin123', 10);
+        const sql2 = `INSERT IGNORE INTO admins (username, password, role) VALUES (?, ?, ?);`;
+        
+        await db.query(sql2, ['admin', hashedPassword, 'مسؤول عام']);
+        
+        console.log('Admins table setup complete with hashed password!');
         process.exit(0);
     } catch(err) {
         console.error(err);
