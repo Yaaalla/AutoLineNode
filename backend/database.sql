@@ -1,5 +1,5 @@
-CREATE DATABASE IF NOT EXISTS autoline_db;
-USE autoline_db;
+CREATE DATABASE IF NOT EXISTS yaaalla_AutolineNode;
+USE yaaalla_AutolineNode;
 
 CREATE TABLE IF NOT EXISTS cars (
     id INT AUTO_INCREMENT PRIMARY KEY,

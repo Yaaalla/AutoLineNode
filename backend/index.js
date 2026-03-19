@@ -65,12 +65,21 @@ const sendBookingEmail = async (bookingDetails) => {
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, 'public')));
+
+// Serve static files from the 'public' folder (sibling to 'backend')
+app.use(express.static(path.join(__dirname, '..', 'public')));
+
+// Explicitly serve index.html for the root route
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'public', 'index.html'));
+});
 
 // Multer Setup for File Uploads
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        let dest = 'public/uploads/';
+        let rootPublic = path.join(__dirname, '..', 'public', 'uploads');
+        let dest = rootPublic + '/';
+        
         if (req.originalUrl.includes('/cars')) dest += 'cars/';
         else if (req.originalUrl.includes('/blogs')) dest += 'blogs/';
         else if (req.originalUrl.includes('/bookings')) dest += 'licenses/';
