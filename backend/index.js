@@ -66,8 +66,8 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Serve static files from the 'public' folder (sibling to 'backend')
-app.use(express.static(path.join(__dirname, '..', 'public')));
+// Serve static files from the root folder (parent of 'backend')
+app.use(express.static(path.join(__dirname, '..')));
 
 // Explicitly serve index.html from the root for / and /index.html
 app.get(['/', '/index.html'], (req, res) => {
@@ -77,8 +77,8 @@ app.get(['/', '/index.html'], (req, res) => {
 // Multer Setup for File Uploads
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        let rootPublic = path.join(__dirname, '..', 'public', 'uploads');
-        let dest = rootPublic + '/';
+        let rootUploads = path.join(__dirname, '..', 'uploads');
+        let dest = rootUploads + '/';
         
         if (req.originalUrl.includes('/cars')) dest += 'cars/';
         else if (req.originalUrl.includes('/blogs')) dest += 'blogs/';
