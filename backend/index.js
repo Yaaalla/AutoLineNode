@@ -69,9 +69,9 @@ app.use(express.urlencoded({ extended: true }));
 // Serve static files from the 'public' folder (sibling to 'backend')
 app.use(express.static(path.join(__dirname, '..', 'public')));
 
-// Explicitly serve index.html for the root route
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, '..', 'public', 'index.html'));
+// Explicitly serve index.html from the root for / and /index.html
+app.get(['/', '/index.html'], (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'index.html'));
 });
 
 // Multer Setup for File Uploads
